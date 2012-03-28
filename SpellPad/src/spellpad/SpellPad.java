@@ -11,6 +11,10 @@ import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyCombination.Modifier;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -35,6 +39,13 @@ public class SpellPad extends Application {
         BorderPane root = new BorderPane();
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
+        Menu open = new Menu("Open");
+        MenuItem add = new MenuItem("Open");
+        KeyCodeCombination kcc = new KeyCodeCombination(
+                KeyCode.O, 
+                KeyCombination.CONTROL_DOWN);
+        add.setAccelerator(kcc);
+        file.getItems().add(open);
         menuBar.getMenus().add(file);
         Menu save = new Menu("Save");
         menuBar.getMenus().add(save);
