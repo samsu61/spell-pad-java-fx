@@ -7,14 +7,14 @@ package spellpad;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  *
@@ -31,22 +31,25 @@ public class SpellPad extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        StackPane root = new StackPane();
+        
+        BorderPane root = new BorderPane();
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
         menuBar.getMenus().add(file);
         Menu save = new Menu("Save");
         menuBar.getMenus().add(save);
         TextArea texty = new TextArea();
-        texty.setWrapText(true);
-        texty.setTranslateY(25);
-        texty.maxHeight(100);
-        root.getChildren().add(menuBar);
-        root.alignmentProperty().setValue(Pos.TOP_CENTER);
-        root.getChildren().add(texty);
         
+        
+        texty.getOnKeyTyped();
+        texty.setWrapText(true);
+        primaryStage.setTitle("Spell Pad");
+        TreeView tree = new TreeView();
+        tree.setPrefWidth(150.0);
+        root.setTop(menuBar);
+        root.setCenter(texty);
+        root.setLeft(tree);
         primaryStage.setScene(new Scene(root, 800, 600));
-
         primaryStage.show();
 
     }
