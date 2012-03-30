@@ -5,20 +5,14 @@
 package spellpad;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyCombination.Modifier;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javax.swing.filechooser.FileSystemView;
+import spellpad.eventhandlers.OnKeyTyped;
 
 /**
  *
@@ -50,7 +44,7 @@ public class SpellPad extends Application {
         Menu save = new Menu("Save");
         menuBar.getMenus().add(save);
         TextArea texty = new TextArea();
-        
+        texty.setOnKeyTyped(new OnKeyTyped());
         
         texty.getOnKeyTyped();
         texty.setWrapText(true);
