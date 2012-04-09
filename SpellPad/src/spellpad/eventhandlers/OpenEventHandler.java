@@ -1,22 +1,23 @@
 package spellpad.eventhandlers;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 import javafx.stage.PopupWindow;
-import javafx.stage.Stage;
-import spellpad.SpellPad;
 
 public class OpenEventHandler implements EventHandler<ActionEvent> {
 
-    public OpenEventHandler(Scene owner) {
-        
+    TextArea area = null;
+    
+    public OpenEventHandler(TextArea textArea) {
+        area = textArea;
     }
 
     @Override
@@ -30,14 +31,15 @@ public class OpenEventHandler implements EventHandler<ActionEvent> {
             System.out.println("No File Chosen");
             return;
         }
-        
+        StringBuilder fileContents = new StringBuilder();
         try {
-            /*
-             * Read in file and put in text area.
-             */
-            System.out.println(chosenFile.getCanonicalPath());
+            FileReader reader = new FileReader(chosenFile);
+            char[] fileCharacters = new char[(int)chosenFile.length()];
+            reader.read(fileCharacters);
+            fileContents.append(new String(fileCharacters));
+            area.setText(fileContents.toString());
         } catch (IOException ex) {
-            Logger.getLogger(SpellPad.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenEventHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(t.getSource());
     }
