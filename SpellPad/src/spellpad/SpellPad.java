@@ -19,7 +19,7 @@ import spellpad.testing.UnitTests;
  */
 public class SpellPad extends Application {
 
-    boolean runTests = true;
+    boolean runTests = false;
     /**
      * @param args the command line arguments
      */
@@ -64,9 +64,8 @@ public class SpellPad extends Application {
         saveItem.setOnAction(new SaveEventHandler(texty));
                 
         file.getItems().add(openItem);
+        file.getItems().add(saveItem);
         menuBar.getMenus().add(file);
-        Menu save = new Menu("Save");
-        menuBar.getMenus().add(save);
         primaryStage.setTitle("Spell Pad");
         TreeView tree = new TreeView();
         tree.setPrefWidth(150.0);
