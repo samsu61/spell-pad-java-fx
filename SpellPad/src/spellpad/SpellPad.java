@@ -1,12 +1,14 @@
 package spellpad;
 
 import javafx.application.Application;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import spellpad.eventhandlers.OnKeyTyped;
 import spellpad.eventhandlers.OpenEventHandler;
@@ -55,10 +57,11 @@ public class SpellPad extends Application {
                 KeyCombination.CONTROL_DOWN);
         saveItem.setAccelerator(controlS);
         
-        TextArea texty = new TextArea();
-        texty.setOnKeyTyped(new OnKeyTyped());
-        texty.getOnKeyTyped();
-        texty.setWrapText(true);
+        HTMLEditor texty = new HTMLEditor();
+        //texty.setOnKeyTyped(new OnKeyTyped());
+        texty.setCacheHint(CacheHint.SPEED);
+        //texty.getOnKeyTyped();
+        //texty.setWrapText(true);
         
         openItem.setOnAction(new OpenEventHandler(texty));
         saveItem.setOnAction(new SaveEventHandler(texty));
@@ -74,6 +77,9 @@ public class SpellPad extends Application {
         root.setLeft(tree);
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
-
+        
+        Test t = new Test();
+        System.out.println(t.GetUserAgentStyleSheet());
+        
     }
 }

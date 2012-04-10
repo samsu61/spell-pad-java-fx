@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 import javafx.stage.PopupWindow;
@@ -19,9 +20,9 @@ import javafx.stage.PopupWindow;
  */
 public class SaveEventHandler implements EventHandler<ActionEvent> {
 
-    private TextArea textAreaBound;
+    private HTMLEditor textAreaBound;
     
-    public SaveEventHandler(TextArea textArea){
+    public SaveEventHandler(HTMLEditor textArea){
         textAreaBound = textArea;
     }
     
@@ -37,7 +38,8 @@ public class SaveEventHandler implements EventHandler<ActionEvent> {
             System.out.println("Save aborted");
             return;
         }
-        String fileContents = textAreaBound.getText();
+//        String fileContents = textAreaBound.getText();
+        String fileContents = textAreaBound.getHtmlText();
         try{
             FileOutputStream fileOS = new FileOutputStream(chosenFile);
             PrintWriter writer = new PrintWriter(fileOS);
@@ -47,12 +49,13 @@ public class SaveEventHandler implements EventHandler<ActionEvent> {
         }catch(IOException ex){
             Logger.getLogger(SaveEventHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     private FileChooser buildFileChooser() {
         FileChooserBuilder fileChooserBuilder = FileChooserBuilder.create();
         fileChooserBuilder.initialDirectory(new File("C:/"));
-        fileChooserBuilder.extensionFilters(new FileChooser.ExtensionFilter("Text Files", "*.txt", "*.spellpad"));
+        fileChooserBuilder.extensionFilters(new FileChooser.ExtensionFilter("Text File", "*.txt"));
         fileChooserBuilder.title("Save the text file");
         return fileChooserBuilder.build();
     }

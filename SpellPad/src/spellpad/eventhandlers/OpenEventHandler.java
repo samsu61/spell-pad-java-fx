@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TextArea;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
@@ -15,9 +14,9 @@ import javafx.stage.PopupWindow;
 
 public class OpenEventHandler implements EventHandler<ActionEvent> {
 
-    TextArea area = null;
+    HTMLEditor area = null;
     
-    public OpenEventHandler(TextArea htmlTextArea) {
+    public OpenEventHandler(HTMLEditor htmlTextArea) {
         area = htmlTextArea;
     }
 
@@ -42,7 +41,8 @@ public class OpenEventHandler implements EventHandler<ActionEvent> {
             char[] fileCharacters = new char[(int)chosenFile.length()];
             reader.read(fileCharacters);
             fileContents.append(fileCharacters);
-            area.setText(fileContents.toString());
+//            area.setText(fileContents.toString());
+            area.setHtmlText(fileContents.toString());
         } catch (IOException ex) {
             Logger.getLogger(OpenEventHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

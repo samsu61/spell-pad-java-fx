@@ -60,7 +60,7 @@ public class OpenEventHandlerTests {
     
     public static boolean Modify_Recreate_InstanceVariableNotNull(){
         myTestee_textArea = new TextArea();
-        myTestee = new OpenEventHandler(myTestee_textArea);
+//        myTestee = new OpenEventHandler(myTestee_textArea);
         return true;
     }
     
