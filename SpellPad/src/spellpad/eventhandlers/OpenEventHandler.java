@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 import javafx.stage.PopupWindow;
@@ -16,12 +17,16 @@ public class OpenEventHandler implements EventHandler<ActionEvent> {
 
     TextArea area = null;
     
-    public OpenEventHandler(TextArea textArea) {
-        area = textArea;
+    public OpenEventHandler(TextArea htmlTextArea) {
+        area = htmlTextArea;
     }
 
     @Override
     public void handle(ActionEvent t) {
+        //Handle possible global errors
+        if(t == null || area == null) return;
+        
+        
         //Build a FileChooser
         FileChooser fileChooser = buildFileChooser();
         //Display the FileChooser and retrieve chosen path
@@ -36,15 +41,13 @@ public class OpenEventHandler implements EventHandler<ActionEvent> {
             FileReader reader = new FileReader(chosenFile);
             char[] fileCharacters = new char[(int)chosenFile.length()];
             reader.read(fileCharacters);
-            fileContents.append(new String(fileCharacters));
+            fileContents.append(fileCharacters);
             area.setText(fileContents.toString());
         } catch (IOException ex) {
             Logger.getLogger(OpenEventHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(t.getSource());
     }
 
-    
     private FileChooser buildFileChooser() {
         FileChooserBuilder fileChooserBuilder = FileChooserBuilder.create();
         fileChooserBuilder.initialDirectory(new File("C:/"));
