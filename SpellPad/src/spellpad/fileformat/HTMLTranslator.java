@@ -7,7 +7,9 @@ package spellpad.fileformat;
 public class HTMLTranslator {
     
     public static String parseHTML(String htmlstring){
-        
-        return "";
+        htmlstring = htmlstring.replace("<", "(");
+        htmlstring = htmlstring.replace(">", ")");
+        htmlstring = htmlstring.replace("/", "~");
+        return htmlstring;
     }
 }
