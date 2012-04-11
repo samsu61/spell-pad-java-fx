@@ -89,6 +89,5 @@ public class SpellPad extends Application {
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
         switchEditor.setOnAction(new SwitchEditorEventHandler(primaryStage.getScene()));
-
     }
 }
