@@ -5,6 +5,7 @@
 package spellpadswing;
 
 import javax.swing.JFrame;
+import spellpad.SpellPad;
 
 /**
  *
