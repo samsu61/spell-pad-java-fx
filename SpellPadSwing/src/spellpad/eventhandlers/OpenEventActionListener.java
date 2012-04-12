@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import java.awt.event.ActionEvent;
@@ -9,9 +5,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextPane;
+import spellpad.eventhandlers.SaveEventActionListener.FileFilterFactory;
 
 /**
  *
@@ -19,9 +15,9 @@ import javax.swing.JTextPane;
  */
 public class OpenEventActionListener implements ActionListener {
 
-    private JTextPane textArea;
+    private JEditorPane textArea;
 
-    public OpenEventActionListener(JTextPane text) {
+    public OpenEventActionListener(JEditorPane text) {
         textArea = text;
     }
 
@@ -31,6 +27,7 @@ public class OpenEventActionListener implements ActionListener {
             return;
         }
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
         int response = fileChooser.showOpenDialog(textArea.getParent());
         if(response == JFileChooser.CANCEL_OPTION || response == JFileChooser.ERROR_OPTION){
             return;
@@ -49,6 +46,5 @@ public class OpenEventActionListener implements ActionListener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }  
-        
     }
 }
