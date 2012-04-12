@@ -4,7 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.Reader;
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLDocument.HTMLReader;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.HTMLEditorKit.ParserCallback;
+import javax.swing.text.html.parser.ParserDelegator;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 
@@ -36,7 +43,9 @@ public class SpellPadSwing {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JEditorPane editPane = new JEditorPane();
-        editPane.setContentType("text/html");
+        HTMLDocument document = new HTMLDocument();
+        document.setParser(new ParserDelegator());
+        editPane.setDocument(document);
         JScrollPane textAreaScrollPane = new JScrollPane(editPane);
         editPane.setPreferredSize(new Dimension(800, 600));
         window.add(textAreaScrollPane, BorderLayout.CENTER);
@@ -47,7 +56,7 @@ public class SpellPadSwing {
         JMenuItem save = new JMenuItem("Save");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        open.addActionListener(new OpenEventActionListener(editPane));
+        open.addActionListener(new OpenEventActionListener(document));
         save.addActionListener(new SaveEventActionListener(editPane));
         
         file.add(open);
