@@ -10,6 +10,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import spellpad.filetype.parsing.SpellpadParser;
 
 /**
  * @author Jesse
@@ -40,6 +41,9 @@ public class SaveEventActionListener implements ActionListener {
             return;
         }
         String textInArea = textArea.getText();
+        System.out.println(textInArea);
+        textInArea = SpellpadParser.restorePlainText(textInArea);
+        System.out.println(textInArea);
         try {
             FileWriter fileWriter = new FileWriter(new File(chosenFile.getAbsoluteFile() + ".txt"));
             try (PrintWriter printer = new PrintWriter(fileWriter)) {

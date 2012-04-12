@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import spellpad.eventhandlers.SaveEventActionListener.FileFilterFactory;
+import spellpad.filetype.parsing.SpellpadParser;
 
 /**
  *
@@ -45,7 +46,8 @@ public class OpenEventActionListener implements ActionListener {
             char[] fileCharacters = new char[(int) chosenFile.length()];
             reader.read(fileCharacters);
             fileContents.append(fileCharacters);
-            textDocument.setText(fileContents.toString());
+            String preppedText = SpellpadParser.prepPlainText(fileContents.toString());
+            textDocument.setText(preppedText.toString());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
