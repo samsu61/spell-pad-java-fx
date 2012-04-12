@@ -51,8 +51,7 @@ public class OpenEventActionListener implements ActionListener {
             
             try {
                 Element element = textDocument.getElement(textDocument.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-                textDocument.setInnerHTML(element, "");
-                textDocument.insertAfterStart(element, fileContents.toString());
+                textDocument.setInnerHTML(element, fileContents.toString());
             } catch (BadLocationException ex) {
                 Logger.getLogger(OpenEventActionListener.class.getName()).log(Level.SEVERE, null, ex);
             }
