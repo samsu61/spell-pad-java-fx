@@ -24,7 +24,7 @@ public class OpenEventActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e == null) {
+        if (e == null || textDocument == null) {
             return;
         }
         JFileChooser fileChooser = new JFileChooser();
