@@ -30,15 +30,19 @@ public class SaveEventActionListenerTest {
     
     @Before
     public void setUp() {
+        if(output.exists()){
+            output.delete();
+        }
     }
     
     @After
     public void tearDown() {
         if (output.exists()) {
             output.delete();
+            System.out.println(output.exists());
         }
     }
-    File output = new File("C:/text.txt");
+    File output = new File("C:/test.txt");
 
     /**
      * Test of actionPerformed method, of class SaveEventActionListener.
@@ -93,7 +97,7 @@ public class SaveEventActionListenerTest {
         System.out.println("saveActionPerformed-notnull-notnull");
         ActionEvent e = new ActionEvent(new Object(), 0, null);
         JEditorPane textArea = new JEditorPane();
-        SaveEventActionListener instance = new SaveEventActionListener(null);
+        SaveEventActionListener instance = new SaveEventActionListener(textArea);
         String s = "This is some sample text.";
         textArea.setText(s);
         instance.actionPerformed(e);
