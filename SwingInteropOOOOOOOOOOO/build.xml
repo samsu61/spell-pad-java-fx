@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="SwingInterop" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <description>Builds, tests, and runs the project SwingInterop.</description>
+    <import file="nbproject/build-impl.xml"/>
+
+    <!-- This file has been modified to enable using JavaFX withing Swing project -->
+    
+    <target name="-define-self-signing">
+        <property name="javafx.signing.enabled" value="true"/>
+        <property name="javafx.signing.type" value="self"/>
+    </target>
+    
+    <target depends="-jfx-copylibs, -define-self-signing, -check-sign" name="-post-jar">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+                uri="javafx:com.sun.javafx.tools.ant"
+                classpath="${javafx.sdk}${file.separator}tools${file.separator}ant-javafx.jar"/>
+                      
+        <!-- delete the artifacts built by standard J2SE netbeans project as we need to build using JavaFX packager -->
+        <delete dir="${dist.dir}${file.separator}lib"/>
+        <delete file="${dist.jar}"/>
+        <delete file="${dist.dir}${file.separator}README.TXT"/>
+        
+        <!-- Build jar using JavaFX packager so that it has code to find installed JavaFX bundled with app -->
+        <fx:jar destfile="${dist.jar}">
+            <fx:application mainClass="${main.class}"/>
+            <fileset dir="${build.classes.dir}"/>
+            <manifest>
+                <attribute name="Implementation-Vendor" value="${application.vendor}"/>
+                <attribute name="Implementation-Title" value="${application.title}"/>
+                <attribute name="Implementation-Version" value="1.0"/>
+            </manifest>
+        </fx:jar>
+        
+        <!-- sign application jar. Use new self signed certificate -->
+        <deploy-defines/>
+        <deploy-sign/>
+        
+        <!-- This is Swing applet/app => We need to use preFX JNLP/html -->
+        <basename property="dist.filename" file="${dist.jar}" suffix=".jar"/>
+        <length file="${dist.jar}" property="dist.jar.size" />
+        <filterchain id="jnlp.template.filter">
+           <replacetokens>
+                <token key="NAME" value="${dist.filename}"/>
+                <token key="MAINCLASS" value="${main.class}"/>
+                <token key="FILESIZE" value="${dist.jar.size}"/>
+                <token key="VENDOR" value="${application.vendor}"/>
+                <token key="TITLE" value="${application.title}"/>
+                <token key="WIDTH" value="${javafx.run.width}"/>
+                <token key="HEIGHT" value="${javafx.run.height}"/>
+            </replacetokens>
+        </filterchain>
+        <copy file="${basedir}${file.separator}web${file.separator}template_application.jnlp_" 
+                 tofile="${dist.dir}${file.separator}${dist.filename}_application.jnlp" >
+                <filterchain refid="jnlp.template.filter"/>
+        </copy>        
+        <copy file="${basedir}${file.separator}web${file.separator}template_applet.jnlp_" 
+                 tofile="${dist.dir}${file.separator}${dist.filename}_applet.jnlp" >
+                <filterchain refid="jnlp.template.filter"/>
+        </copy>        
+        <copy file="${basedir}${file.separator}web${file.separator}template.html_" 
+                 tofile="${dist.dir}${file.separator}${dist.filename}.html" >
+                <filterchain refid="jnlp.template.filter"/>
+        </copy>        
+        <copy file="${basedir}${file.separator}web${file.separator}README.TXT" 
+                 tofile="${dist.dir}${file.separator}README.TXT"/>
+    </target>
+
+</project>
