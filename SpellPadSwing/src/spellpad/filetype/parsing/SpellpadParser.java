@@ -13,14 +13,21 @@ public class SpellpadParser {
         plainText = plainText.replace("\n", "<br>");
         return plainText;
     }
+    
+    static public String restorePlainText(String htmlText){
+        htmlText = Jsoup.parse(htmlText).text();
+        return StringEscapeUtils.unescapeHtml4(htmlText);
+    }
 
-    static public String restorePlainText(String htmlText) {
+    /*static public String restorePlainText(String htmlText) {
         htmlText = htmlText.substring(44);
         htmlText = htmlText.replace("<p style=\"margin-top: 0\">", "").replace("</p>", "");
        htmlText = htmlText.substring(0, htmlText.length()-22);
         htmlText = StringEscapeUtils.unescapeHtml4(htmlText);
         return htmlText;
     }
+    * 
+    */
     
     /*static public String restorePlainText(String htmlText) {
         htmlText = htmlText.replace("<p style=\"margin-top: 0\">", "\r\n");
