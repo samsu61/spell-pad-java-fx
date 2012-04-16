@@ -3,6 +3,7 @@ package spellpad.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
@@ -22,12 +23,12 @@ public class SpellPadSwing {
     }
 
     public void init() {
-        try{
+        try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }catch(ClassNotFoundException | 
-                InstantiationException | 
-                IllegalAccessException | 
-                UnsupportedLookAndFeelException e){
+        } catch (ClassNotFoundException |
+                InstantiationException |
+                IllegalAccessException |
+                UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
         JFrame window = new JFrame();
@@ -36,7 +37,7 @@ public class SpellPadSwing {
         window.setLocationRelativeTo(null);
         window.setTitle("SpellPad");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         JEditorPane editPane = new JEditorPane();
         HTMLDocument document = new HTMLDocument();
         document.setParser(new ParserDelegator());
@@ -45,23 +46,33 @@ public class SpellPadSwing {
         JScrollPane textAreaScrollPane = new JScrollPane(editPane);
         editPane.setPreferredSize(new Dimension(800, 600));
         window.add(textAreaScrollPane, BorderLayout.CENTER);
-        
+
         JMenuBar menubar = new JMenuBar();
         JMenu file = new JMenu("File");
         JMenuItem open = new JMenuItem("Open");
         JMenuItem save = new JMenuItem("Save");
+        JMenuItem exit = new JMenuItem("Exit");
+
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         open.addActionListener(new OpenEventActionListener(editPane));
         save.addActionListener(new SaveEventActionListener(editPane));
-        
+        exit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
         file.add(open);
         file.add(save);
+        file.add(exit);
         menubar.add(file);
-        
-        
+
+
         window.setJMenuBar(menubar);
-        
+
         window.setVisible(true);
     }
 }

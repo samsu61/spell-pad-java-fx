@@ -36,19 +36,29 @@ public class SaveEventActionListener implements ActionListener {
             return;
         }
         File chosenFile = fileChooser.getSelectedFile();
-        if (chosenFile == null) {
-            System.out.print("null file");
+        FileNameExtensionFilter chosenFilter = (FileNameExtensionFilter) fileChooser.getFileFilter();
+        if (chosenFile == null || chosenFilter == null) {
+            System.out.print("null file or filter");
             return;
         }
         String textInArea = textArea.getText();
-        System.out.println(textInArea);
-        textInArea = SpellpadParser.restorePlainText(textInArea);
+        //System.out.println(textInArea);
+        textInArea =  SpellpadParser.restorePlainText(textInArea);
+
         System.out.println(textInArea);
         try {
-            FileWriter fileWriter = new FileWriter(new File(chosenFile.getAbsoluteFile() + ".txt"));
+            String chosenDestination = chosenFile.getCanonicalPath();
+            if(!chosenDestination.endsWith('.' + chosenFilter.getExtensions()[0])){
+                chosenFile = new File(chosenFile.getCanonicalPath() + '.' + chosenFilter.getExtensions()[0]);
+                if(!chosenFilter.accept(chosenFile)){
+                    throw new IOException("File name does not pass rule");
+                }
+            }
+            FileWriter fileWriter = new FileWriter(chosenFile);
             try (PrintWriter printer = new PrintWriter(fileWriter)) {
                 printer.print(textInArea);
                 printer.flush();
+                printer.close();
             }
         } catch (IOException ex) {
             ex.printStackTrace();
