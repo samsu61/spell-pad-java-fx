@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class SpellpadParser {
 
     static public String prepPlainText(String plainText) {
-        plainText = StringEscapeUtils.escapeHtml4(plainText);
+        //plainText = StringEscapeUtils.escapeHtml4(plainText);
         plainText = plainText.replace("\n", "<br>");
         return plainText;
     }

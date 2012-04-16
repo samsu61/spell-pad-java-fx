@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
-import spellpad.eventhandlers.SaveEventActionListener.FileFilterFactory;
 import spellpad.filetype.parsing.SpellpadParser;
 
 /**
@@ -27,19 +26,18 @@ public class OpenEventActionListener implements ActionListener {
         if (e == null || textDocument == null) {
             return;
         }
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
-        int response = fileChooser.showOpenDialog(null);
-        if (response == JFileChooser.CANCEL_OPTION || response == JFileChooser.ERROR_OPTION) {
-            return;
-        }
-        File chosenFile = fileChooser.getSelectedFile();
+        FileChooserDetails details = FileFilterFactory.getFileFromPopupDialogue(FileAction.OPEN);
+        File chosenFile = details.getFile();
         if (chosenFile == null) {
             return;
         }
         if (!chosenFile.isFile()) {
             return;
         }
+        openFile(chosenFile);
+    }
+
+    private void openFile(File chosenFile) {
         StringBuilder fileContents = new StringBuilder();
         try {
             FileReader reader = new FileReader(chosenFile);

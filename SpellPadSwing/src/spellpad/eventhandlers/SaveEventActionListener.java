@@ -48,28 +48,28 @@ public class SaveEventActionListener implements ActionListener {
         System.out.println(textInArea);
         try {
             String chosenDestination = chosenFile.getCanonicalPath();
-            if(!chosenDestination.endsWith('.' + chosenFilter.getExtensions()[0])){
-                chosenFile = new File(chosenFile.getCanonicalPath() + '.' + chosenFilter.getExtensions()[0]);
+            String comparisonExtension = '.' + chosenFilter.getExtensions()[0];
+            if(!chosenDestination.endsWith(comparisonExtension)){
+                chosenFile = new File(chosenFile.getCanonicalPath() + comparisonExtension);
                 if(!chosenFilter.accept(chosenFile)){
+                    System.out.println(chosenFile.getCanonicalPath());
                     throw new IOException("File name does not pass rule");
                 }
             }
-            FileWriter fileWriter = new FileWriter(chosenFile);
-            try (PrintWriter printer = new PrintWriter(fileWriter)) {
-                printer.print(textInArea);
-                printer.flush();
-                printer.close();
-            }
+            writeFile(chosenFile, textInArea);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    static final class FileFilterFactory {
-
-        static FileFilter getSpellpadFileFilter() {
-            FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Text Files", "txt");
-            return extensionFilter;
+    private void writeFile(File chosenFile, String textInArea) throws IOException {
+        FileWriter fileWriter = new FileWriter(chosenFile);
+        try (PrintWriter printer = new PrintWriter(fileWriter)) {
+            printer.print(textInArea);
+            printer.flush();
+            printer.close();
         }
     }
+
+    
 }

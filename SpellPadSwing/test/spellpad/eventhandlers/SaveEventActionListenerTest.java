@@ -103,6 +103,7 @@ public class SaveEventActionListenerTest {
         SaveEventActionListener instance = new SaveEventActionListener(textArea);
         String s = "This is some sample text.";
         textArea.setText(s);
+        assertTrue(!output.exists());
         instance.actionPerformed(e);
         assertTrue(output.exists());
         try {
