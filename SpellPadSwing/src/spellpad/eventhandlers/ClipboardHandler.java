@@ -38,7 +38,7 @@ public class ClipboardHandler implements ClipboardOwner {
         if(transferIsText){
             try {
                 result = (String)contents.getTransferData(DataFlavor.stringFlavor);
-            } catch (    UnsupportedFlavorException | IOException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ClipboardHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
