@@ -12,6 +12,7 @@ import javax.swing.text.html.parser.ParserDelegator;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
+import spellpad.eventhandlers.textmodifying.BoldEventListener;
 
 /**
  * @author Jesse
@@ -39,6 +40,7 @@ public class SpellPadSwing {
             e.printStackTrace();
         }
         JFrame window = initFrame();
+        
 
         JEditorPane editPane = new JEditorPane();
         HTMLDocument document = new HTMLDocument();
@@ -75,7 +77,8 @@ public class SpellPadSwing {
         menubar.add(file);
         
         JToolBar toolBar = new JToolBar("Still Draggable");
-        JButton boldButton = new JButton("B");
+        JToggleButton boldButton = new JToggleButton("B");
+        boldButton.addActionListener(new BoldEventListener(editPane));
         toolBar.add(boldButton);
        
         
