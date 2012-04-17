@@ -18,6 +18,11 @@ import spellpad.eventhandlers.mouse.MouseListener;
  */
 public class SpellPadSwing {
 
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 600;
+    public static final String CONTENT_TYPE = "text/html";
+    
+    
     public static void main(String[] args) {
         // TODO code application logic here
         SpellPadSwing spellpad = new SpellPadSwing();
@@ -40,10 +45,10 @@ public class SpellPadSwing {
         document.setParser(new ParserDelegator());
 
         editPane.setDocument(document);
-        editPane.setContentType("text/html");
+        editPane.setContentType(CONTENT_TYPE);
         JScrollPane textAreaScrollPane = new JScrollPane(editPane);
-        editPane.setPreferredSize(new Dimension(800, 600));
-        editPane.addMouseListener(new MouseListener());
+        editPane.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        editPane.addMouseListener(new MouseListener(editPane));
         window.add(textAreaScrollPane, BorderLayout.CENTER);
 
         JMenuBar menubar = new JMenuBar();
@@ -69,8 +74,11 @@ public class SpellPadSwing {
         file.add(exit);
         menubar.add(file);
 
-
+        textAreaScrollPane.setDoubleBuffered(true);
+        editPane.setDoubleBuffered(true);
         window.setJMenuBar(menubar);
+        
+        
 
         window.setVisible(true);
     }

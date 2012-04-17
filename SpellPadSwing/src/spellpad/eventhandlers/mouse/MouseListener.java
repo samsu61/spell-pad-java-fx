@@ -2,6 +2,7 @@ package spellpad.eventhandlers.mouse;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JEditorPane;
 
 /**
  *
@@ -9,6 +10,12 @@ import java.awt.event.MouseEvent;
  */
 public class MouseListener extends MouseAdapter {
 
+    JEditorPane textArea;
+    
+    public MouseListener(JEditorPane editor){
+        textArea = editor;
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.isPopupTrigger()) {
@@ -24,7 +31,7 @@ public class MouseListener extends MouseAdapter {
     }
     
     private void doPop(MouseEvent e) {
-        RightClickPopupMenu popup = new RightClickPopupMenu();
+        RightClickPopupMenu popup = new RightClickPopupMenu(textArea);
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
 }
