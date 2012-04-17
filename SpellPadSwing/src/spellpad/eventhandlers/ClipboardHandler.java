@@ -13,10 +13,9 @@ import javax.swing.JEditorPane;
  */
 public class ClipboardHandler implements ClipboardOwner {
     
-    JEditorPane textArea;
     
-    public ClipboardHandler(JEditorPane editor){
-        textArea = editor;
+    
+    public ClipboardHandler(){
     }
 
     @Override
@@ -31,8 +30,8 @@ public class ClipboardHandler implements ClipboardOwner {
     }
     
     public String getClipboardContents(){
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemSelection();
-        Transferable contents = clipboard.getContents(null);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(this);
         boolean transferIsText = (contents != null) 
                 && (contents.isDataFlavorSupported(DataFlavor.stringFlavor));
         String result = "";

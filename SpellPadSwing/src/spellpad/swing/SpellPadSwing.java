@@ -73,10 +73,17 @@ public class SpellPadSwing {
         file.add(save);
         file.add(exit);
         menubar.add(file);
+        
+        JToolBar toolBar = new JToolBar("Still Draggable");
+        JButton boldButton = new JButton("B");
+        toolBar.add(boldButton);
+       
+        
 
         textAreaScrollPane.setDoubleBuffered(true);
         editPane.setDoubleBuffered(true);
         window.setJMenuBar(menubar);
+        window.add(toolBar, BorderLayout.PAGE_START);
         
         
 

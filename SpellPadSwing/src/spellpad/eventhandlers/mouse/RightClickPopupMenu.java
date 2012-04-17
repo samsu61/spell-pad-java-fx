@@ -16,36 +16,84 @@ import spellpad.eventhandlers.ClipboardHandler;
  * @author Jesse Allen
  */
 public class RightClickPopupMenu extends JPopupMenu {
-    
+
     JMenuItem copy;
+    JMenuItem paste;
     ClipboardHandler handler;
-    private JEditorPane textArea;
-    
-    public RightClickPopupMenu(JEditorPane editor){
+    JEditorPane textArea;
+
+    public RightClickPopupMenu(JEditorPane editor) {
         textArea = editor;
-        handler = new ClipboardHandler(editor);
+        handler = new ClipboardHandler();
         copy = new JMenuItem("Copy");
         copy.addActionListener(new CopyActionListener());
+        paste = new JMenuItem("Paste");
+        paste.addActionListener(new PasteActionListener());
+
         add(copy);
+        add(paste);
     }
-    
-   
+
     private class CopyActionListener implements ActionListener {
 
+        public CopyActionListener() {
+        }
+
+        @Override
         public void actionPerformed(ActionEvent e) {
-            Caret cursor =  textArea.getCaret();
-            int a = cursor.getDot();
-            int b = cursor.getMark();
-            if( a != b){
-                try {
-                    String text = a > b
-                            ? textArea.getText(b, a-b)
-                            : textArea.getText(a, b-a);
-                    handler.setClipboardContents(text);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(RightClickPopupMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            copy();
+        }
+
+        private void copy() {
+            handler.setClipboardContents(textArea.getSelectedText());
+        }
+    }
+
+    private class PasteActionListener implements ActionListener {
+
+        public PasteActionListener() {
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                paste();
+            } catch (BadLocationException ex) {
+                Logger.getLogger(RightClickPopupMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+
+        private void paste() throws BadLocationException {
+            Caret cursor = textArea.getCaret();
+            int location = cursor.getMark();
+            int prevLoc = cursor.getDot();
+            if (location == prevLoc) {
+                noSelectionPaste(cursor);
+            } else {
+                pasteIntoSelection(location, prevLoc, cursor);
+            }
+        }
+
+        private void pasteIntoSelection(int location, int prevLoc, Caret cursor) throws BadLocationException {
+            String text = textArea.getDocument().getText(0, textArea.getDocument().getLength());
+            StringBuilder stringEditted = new StringBuilder(text);
+            boolean a_before_b = location > prevLoc;
+            stringEditted = a_before_b
+                    ? stringEditted.replace(prevLoc, location, "")
+                    : stringEditted.replace(location, prevLoc, "");
+            stringEditted.insert(
+                    a_before_b
+                    ? prevLoc
+                    : location,
+                    handler.getClipboardContents());
+            textArea.setText(stringEditted.toString());
+            cursor.setDot(0);
+        }
+
+        private void noSelectionPaste(Caret cursor) {
+            StringBuilder stringEdited = new StringBuilder(textArea.getText());
+            stringEdited.insert(cursor.getMark(), handler.getClipboardContents());
+            textArea.setText(stringEdited.toString());
         }
     }
 }
