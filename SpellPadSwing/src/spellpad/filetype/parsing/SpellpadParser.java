@@ -8,13 +8,17 @@ import org.jsoup.Jsoup;
  */
 public class SpellpadParser {
 
-    static public String prepPlainText(String plainText) {
+    SpellpadParser(){
+        
+    }
+    
+    public static String prepPlainText(String plainText) {
         //plainText = StringEscapeUtils.escapeHtml4(plainText);
         plainText = plainText.replace("\n", "<br>");
         return plainText;
     }
     
-    static public String restorePlainText(String htmlText){
+    public static String restorePlainText(String htmlText){
         htmlText = Jsoup.parse(htmlText).text();
         return StringEscapeUtils.unescapeHtml4(htmlText);
     }
@@ -36,11 +40,11 @@ public class SpellpadParser {
         return htmlText;
     }
 */
-    static public String toHTML(String spellpadText) {
+    public static String toHTML(String spellpadText) {
         return spellpadText;
     }
 
-    static public String toSpellPad(String htmlText) {
+    public static String toSpellPad(String htmlText) {
         return htmlText;
     }
 }
