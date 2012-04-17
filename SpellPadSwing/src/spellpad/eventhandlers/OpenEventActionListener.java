@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import spellpad.filetype.parsing.SpellpadParser;
 
 /**
@@ -35,6 +34,8 @@ public class OpenEventActionListener implements ActionListener {
             return;
         }
         openFile(chosenFile);
+        //Reposition caret to top of document.
+        textDocument.getCaret().setDot(0);
     }
 
     private void openFile(File chosenFile) {

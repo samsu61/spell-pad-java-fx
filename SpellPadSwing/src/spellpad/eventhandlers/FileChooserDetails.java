@@ -18,7 +18,7 @@ public class FileChooserDetails {
     
     public FileChooserDetails(File file, FileNameExtensionFilter filter){
         this.file = file;
-        filter = extensionFilter;
+        extensionFilter = filter;
     }
     
     public File getFile(){
