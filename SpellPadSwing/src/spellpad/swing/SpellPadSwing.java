@@ -2,6 +2,7 @@ package spellpad.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
+import spellpad.eventhandlers.mouse.MouseListener;
 
 /**
  * @author Jesse
@@ -31,20 +33,17 @@ public class SpellPadSwing {
                 UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        JFrame window = new JFrame();
-        window.setLayout(new BorderLayout());
-        window.setBounds(0, 0, 800, 600);
-        window.setLocationRelativeTo(null);
-        window.setTitle("SpellPad");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame window = initFrame();
 
         JEditorPane editPane = new JEditorPane();
         HTMLDocument document = new HTMLDocument();
         document.setParser(new ParserDelegator());
+
         editPane.setDocument(document);
         editPane.setContentType("text/html");
         JScrollPane textAreaScrollPane = new JScrollPane(editPane);
         editPane.setPreferredSize(new Dimension(800, 600));
+        editPane.addMouseListener(new MouseListener());
         window.add(textAreaScrollPane, BorderLayout.CENTER);
 
         JMenuBar menubar = new JMenuBar();
@@ -74,5 +73,15 @@ public class SpellPadSwing {
         window.setJMenuBar(menubar);
 
         window.setVisible(true);
+    }
+
+    private JFrame initFrame() throws HeadlessException {
+        JFrame window = new JFrame();
+        window.setLayout(new BorderLayout());
+        window.setBounds(0, 0, 800, 600);
+        window.setLocationRelativeTo(null);
+        window.setTitle("SpellPad");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        return window;
     }
 }
