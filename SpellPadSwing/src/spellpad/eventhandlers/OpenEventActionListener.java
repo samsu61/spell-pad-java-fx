@@ -45,8 +45,15 @@ public class OpenEventActionListener implements ActionListener {
             char[] fileCharacters = new char[(int) chosenFile.length()];
             reader.read(fileCharacters);
             fileContents.append(fileCharacters);
-            String preppedText = SpellpadParser.prepPlainText(fileContents.toString());
-            textDocument.setText(preppedText.toString());
+            
+            if(fileContents.length() > 500000){
+                textDocument.setContentType("text/plain");
+                textDocument.setText(new String(fileContents));
+            }else{
+                String preppedText = SpellpadParser.prepPlainText(fileContents.toString());
+                textDocument.setText(preppedText.toString());
+            }
+           //textDocument.setContentType("text/html");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

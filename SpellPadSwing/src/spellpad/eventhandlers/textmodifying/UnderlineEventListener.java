@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package spellpad.eventhandlers.textmodifying;
 
 import javax.swing.text.SimpleAttributeSet;
@@ -8,21 +12,21 @@ import spellpad.swing.SpellPadEditorPane;
  *
  * @author Jesse Allen
  */
-public class ItalicsEventListener extends BasicModificationEventListener {
-
-
-    public ItalicsEventListener(SpellPadEditorPane editor) {
-        super(editor);
+public class UnderlineEventListener extends BasicModificationEventListener{
+    
+    public UnderlineEventListener(SpellPadEditorPane textPane){
+        super(textPane);
     }
-
+    
     @Override
     SimpleAttributeSet doSpecific() {
         SimpleAttributeSet attr = new SimpleAttributeSet();
-        StyleConstants.setItalic(attr, true);
+        StyleConstants.setUnderline(attr, true);
         if (textArea.getCharacterAttributes().containsAttributes(attr)) {
             attr = new SimpleAttributeSet();
-            StyleConstants.setItalic(attr, false);
+            StyleConstants.setUnderline(attr, false);
         }
         return attr;
     }
+    
 }
