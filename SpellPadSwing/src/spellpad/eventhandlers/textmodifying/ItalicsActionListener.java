@@ -8,19 +8,19 @@ import spellpad.swing.SpellPadEditorPane;
  *
  * @author Jesse Allen
  */
-public class UnderlineEventListener extends BasicModificationEventListener {
+public class ItalicsActionListener extends BasicModificationActionListener {
 
-    public UnderlineEventListener(SpellPadEditorPane textPane) {
-        super(textPane);
+    public ItalicsActionListener(SpellPadEditorPane editor) {
+        super(editor);
     }
 
     @Override
     SimpleAttributeSet doSpecific() {
         SimpleAttributeSet attr = new SimpleAttributeSet();
-        StyleConstants.setUnderline(attr, true);
+        StyleConstants.setItalic(attr, true);
         if (textArea.getCharacterAttributes().containsAttributes(attr)) {
             attr = new SimpleAttributeSet();
-            StyleConstants.setUnderline(attr, false);
+            StyleConstants.setItalic(attr, false);
         }
         return attr;
     }

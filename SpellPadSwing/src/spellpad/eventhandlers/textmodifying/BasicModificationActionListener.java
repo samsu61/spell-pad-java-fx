@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.SimpleAttributeSet;
@@ -15,11 +14,11 @@ import spellpad.swing.SpellPadEditorPane;
  *
  * @author Jesse Allen
  */
-public abstract class BasicModificationEventListener implements ActionListener {
+public abstract class BasicModificationActionListener implements ActionListener {
 
     SpellPadEditorPane textArea;
 
-    public BasicModificationEventListener(SpellPadEditorPane editor) {
+    public BasicModificationActionListener(SpellPadEditorPane editor) {
         textArea = editor;
     }
 
@@ -28,7 +27,7 @@ public abstract class BasicModificationEventListener implements ActionListener {
         try {
             doTextModify();
         } catch (BadLocationException ex) {
-            Logger.getLogger(BoldEventListener.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BoldActionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
