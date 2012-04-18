@@ -13,6 +13,8 @@ import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
 import spellpad.eventhandlers.textmodifying.BoldEventListener;
+import spellpad.eventhandlers.textmodifying.ItalicsEventListener;
+import spellpad.eventhandlers.textmodifying.UnderlineEventListener;
 
 /**
  * @author Jesse
@@ -42,7 +44,7 @@ public class SpellPadSwing {
         JFrame window = initFrame();
         
 
-        JEditorPane editPane = new JEditorPane();
+        SpellPadEditorPane editPane = new SpellPadEditorPane();
         HTMLDocument document = new HTMLDocument();
         document.setParser(new ParserDelegator());
 
@@ -77,9 +79,15 @@ public class SpellPadSwing {
         menubar.add(file);
         
         JToolBar toolBar = new JToolBar("Still Draggable");
-        JToggleButton boldButton = new JToggleButton("B");
+        JButton boldButton = new JButton("B");
+        JButton italicButton = new JButton("I");
+        JButton underlineButton = new JButton("U");
         boldButton.addActionListener(new BoldEventListener(editPane));
+        italicButton.addActionListener(new ItalicsEventListener(editPane));
+        underlineButton.addActionListener(new UnderlineEventListener(editPane));
         toolBar.add(boldButton);
+        toolBar.add(italicButton);
+        toolBar.add(underlineButton);
        
         
 
@@ -89,7 +97,7 @@ public class SpellPadSwing {
         window.add(toolBar, BorderLayout.PAGE_START);
         
         
-
+        editPane.requestFocus();
         window.setVisible(true);
     }
 
