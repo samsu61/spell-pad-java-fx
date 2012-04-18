@@ -17,6 +17,7 @@ public class SpellPadEditorPane extends JTextPane {
      * @param index the index ignoring html that we seek to
      * @return the index in the actual string
      */
+    @Deprecated
     public int seekIgnoreHtml(int index) {
         String content = getText();
         

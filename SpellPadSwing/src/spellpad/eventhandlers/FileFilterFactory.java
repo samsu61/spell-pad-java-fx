@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
-import java.io.File;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,22 +14,20 @@ final class FileFilterFactory {
         FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Text Files", "txt");
         return extensionFilter;
     }
-    
-    static FileChooserDetails getFileFromPopupDialogue(FileAction openOrSave){
+
+    static FileChooserDetails getFileFromPopupDialogue(FileAction openOrSave) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
-        int response = openOrSave == FileAction.SAVE 
-                ? fileChooser.showSaveDialog(null) 
+        int response = openOrSave == FileAction.SAVE
+                ? fileChooser.showSaveDialog(null)
                 : fileChooser.showOpenDialog(null);
         if (response == JFileChooser.CANCEL_OPTION || response == JFileChooser.ERROR_OPTION) {
             System.out.println("not successed");
         }
-        FileChooserDetails thisChoosersDetails = 
+        FileChooserDetails thisChoosersDetails =
                 new FileChooserDetails(
-                    fileChooser.getSelectedFile(),
-                    (FileNameExtensionFilter)fileChooser.getFileFilter()
-                );
+                fileChooser.getSelectedFile(),
+                (FileNameExtensionFilter) fileChooser.getFileFilter());
         return thisChoosersDetails;
     }
 }
-

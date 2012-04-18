@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import javax.swing.event.DocumentEvent;
@@ -27,5 +23,4 @@ public class DocumentChangedActionListener implements DocumentListener {
     public void changedUpdate(DocumentEvent de) {
         System.out.println(de);
     }
-    
 }

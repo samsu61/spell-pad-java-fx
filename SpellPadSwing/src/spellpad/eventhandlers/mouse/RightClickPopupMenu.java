@@ -1,15 +1,11 @@
 package spellpad.eventhandlers.mouse;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Caret;
 import spellpad.eventhandlers.ClipboardHandler;
+import spellpad.eventhandlers.textmodifying.CopyActionListener;
+import spellpad.eventhandlers.textmodifying.PasteActionListener;
 
 /**
  *
@@ -26,74 +22,11 @@ public class RightClickPopupMenu extends JPopupMenu {
         textArea = editor;
         handler = new ClipboardHandler();
         copy = new JMenuItem("Copy");
-        copy.addActionListener(new CopyActionListener());
+        copy.addActionListener(new CopyActionListener(handler, textArea));
         paste = new JMenuItem("Paste");
-        paste.addActionListener(new PasteActionListener());
+        paste.addActionListener(new PasteActionListener(handler, textArea));
 
         add(copy);
         add(paste);
-    }
-
-    private class CopyActionListener implements ActionListener {
-
-        public CopyActionListener() {
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            copy();
-        }
-
-        private void copy() {
-            handler.setClipboardContents(textArea.getSelectedText());
-        }
-    }
-
-    private class PasteActionListener implements ActionListener {
-
-        public PasteActionListener() {
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                paste();
-            } catch (BadLocationException ex) {
-                Logger.getLogger(RightClickPopupMenu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        private void paste() throws BadLocationException {
-            Caret cursor = textArea.getCaret();
-            int location = cursor.getMark();
-            int prevLoc = cursor.getDot();
-            if (location == prevLoc) {
-                noSelectionPaste(cursor);
-            } else {
-                pasteIntoSelection(location, prevLoc, cursor);
-            }
-        }
-
-        private void pasteIntoSelection(int location, int prevLoc, Caret cursor) throws BadLocationException {
-            String text = textArea.getDocument().getText(0, textArea.getDocument().getLength());
-            StringBuilder stringEditted = new StringBuilder(text);
-            boolean a_before_b = location > prevLoc;
-            stringEditted = a_before_b
-                    ? stringEditted.replace(prevLoc, location, "")
-                    : stringEditted.replace(location, prevLoc, "");
-            stringEditted.insert(
-                    a_before_b
-                    ? prevLoc
-                    : location,
-                    handler.getClipboardContents());
-            textArea.setText(stringEditted.toString());
-            cursor.setDot(0);
-        }
-
-        private void noSelectionPaste(Caret cursor) {
-            StringBuilder stringEdited = new StringBuilder(textArea.getText());
-            stringEdited.insert(cursor.getMark(), handler.getClipboardContents());
-            textArea.setText(stringEdited.toString());
-        }
     }
 }
