@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import spellpad.filetype.parsing.SpellpadParser;
 
@@ -24,16 +25,14 @@ public class SaveEventActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        //Is e necessary?
-        if (e == null || textArea == null) {
+        if (textArea == null) {
             return;
         }
-        
+
         FileChooserDetails details = FileFilterFactory.getFileFromPopupDialogue(FileAction.SAVE);
         File chosenFile = details.getFile();
         FileNameExtensionFilter chosenFilter = details.getExtensionFilter();
-        
+
         if (chosenFile == null || chosenFilter == null) {
             System.out.print("null file or filter");
             return;
@@ -63,7 +62,7 @@ public class SaveEventActionListener implements ActionListener {
                 printer.close();
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(SaveEventActionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

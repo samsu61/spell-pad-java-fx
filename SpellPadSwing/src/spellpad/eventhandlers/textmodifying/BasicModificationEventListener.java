@@ -5,11 +5,11 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JToggleButton;
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyledDocument;
 import spellpad.swing.SpellPadEditorPane;
-import spellpad.swing.SpellPadSwing;
 
 /**
  *
@@ -25,15 +25,14 @@ public abstract class BasicModificationEventListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton ourSource = (JButton) e.getSource();
         try {
-            doTextModify(ourSource);
+            doTextModify();
         } catch (BadLocationException ex) {
             Logger.getLogger(BoldEventListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void doTextModify(JButton ourSource) throws BadLocationException {
+    private void doTextModify() throws BadLocationException {
         StyledDocument textDocument = (StyledDocument) textArea.getDocument();
         Caret cursor = textArea.getCaret();
         int mark = cursor.getMark();

@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
+import javax.swing.undo.UndoManager;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
@@ -33,34 +34,46 @@ public class SpellPadSwing {
     }
 
     public void init() {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException |
-                InstantiationException |
-                IllegalAccessException |
-                UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+        setLookAndFeel();
         JFrame window = initFrame();
+        SpellPadEditorPane editPane = initTextPane();
+        JScrollPane textAreaScrollPane = addScrolling(editPane, window);
+        JMenuBar menubar = initMenuBar(editPane);
+        JToolBar toolBar = initToolBar(editPane);
+       
+        textAreaScrollPane.setDoubleBuffered(true);
+        editPane.setDoubleBuffered(true);
+        window.setJMenuBar(menubar);
+        window.add(toolBar, BorderLayout.PAGE_START);
         
+        UndoManager undoManager = new UndoManager();
+        editPane.getDocument().addUndoableEditListener(undoManager);
+        
+        
+        editPane.requestFocus();
+        window.setVisible(true);
+    }
 
-        SpellPadEditorPane editPane = new SpellPadEditorPane();
-        HTMLDocument document = new HTMLDocument();
-        document.setParser(new ParserDelegator());
+    private JToolBar initToolBar(SpellPadEditorPane editPane) {
+        JToolBar toolBar = new JToolBar("Text Controls");
+        JButton boldButton = new JButton("B");
+        JButton italicButton = new JButton("I");
+        JButton underlineButton = new JButton("U");
+        boldButton.addActionListener(new BoldEventListener(editPane));
+        italicButton.addActionListener(new ItalicsEventListener(editPane));
+        underlineButton.addActionListener(new UnderlineEventListener(editPane));
+        toolBar.add(boldButton);
+        toolBar.add(italicButton);
+        toolBar.add(underlineButton);
+        return toolBar;
+    }
 
-        editPane.setDocument(document);
-        editPane.setContentType(CONTENT_TYPE);
-        JScrollPane textAreaScrollPane = new JScrollPane(editPane);
-        editPane.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-        editPane.addMouseListener(new MouseListener(editPane));
-        window.add(textAreaScrollPane, BorderLayout.CENTER);
-
+    private JMenuBar initMenuBar(SpellPadEditorPane editPane) {
         JMenuBar menubar = new JMenuBar();
         JMenu file = new JMenu("File");
         JMenuItem open = new JMenuItem("Open");
         JMenuItem save = new JMenuItem("Save");
         JMenuItem exit = new JMenuItem("Exit");
-
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         open.addActionListener(new OpenEventActionListener(editPane));
@@ -72,33 +85,39 @@ public class SpellPadSwing {
                 System.exit(0);
             }
         });
-
         file.add(open);
         file.add(save);
         file.add(exit);
         menubar.add(file);
-        
-        JToolBar toolBar = new JToolBar("Still Draggable");
-        JButton boldButton = new JButton("B");
-        JButton italicButton = new JButton("I");
-        JButton underlineButton = new JButton("U");
-        boldButton.addActionListener(new BoldEventListener(editPane));
-        italicButton.addActionListener(new ItalicsEventListener(editPane));
-        underlineButton.addActionListener(new UnderlineEventListener(editPane));
-        toolBar.add(boldButton);
-        toolBar.add(italicButton);
-        toolBar.add(underlineButton);
-       
-        
+        return menubar;
+    }
 
-        textAreaScrollPane.setDoubleBuffered(true);
-        editPane.setDoubleBuffered(true);
-        window.setJMenuBar(menubar);
-        window.add(toolBar, BorderLayout.PAGE_START);
-        
-        
-        editPane.requestFocus();
-        window.setVisible(true);
+    private JScrollPane addScrolling(SpellPadEditorPane editPane, JFrame window) {
+        JScrollPane textAreaScrollPane = new JScrollPane(editPane);
+        editPane.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        editPane.addMouseListener(new MouseListener(editPane));
+        window.add(textAreaScrollPane, BorderLayout.CENTER);
+        return textAreaScrollPane;
+    }
+
+    private SpellPadEditorPane initTextPane() {
+        SpellPadEditorPane editPane = new SpellPadEditorPane();
+        HTMLDocument document = new HTMLDocument();
+        document.setParser(new ParserDelegator());
+        editPane.setDocument(document);
+        editPane.setContentType(CONTENT_TYPE);
+        return editPane;
+    }
+
+    protected void setLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException |
+                InstantiationException |
+                IllegalAccessException |
+                UnsupportedLookAndFeelException e) {
+            
+        }
     }
 
     private JFrame initFrame() throws HeadlessException {

@@ -10,7 +10,6 @@ import spellpad.swing.SpellPadEditorPane;
  */
 public class ItalicsEventListener extends BasicModificationEventListener {
 
-
     public ItalicsEventListener(SpellPadEditorPane editor) {
         super(editor);
     }
