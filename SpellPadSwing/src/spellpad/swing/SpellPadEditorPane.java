@@ -20,7 +20,7 @@ public class SpellPadEditorPane extends JTextPane {
     @Deprecated
     public int seekIgnoreHtml(int index) {
         String content = getText();
-        
+
         int realIndex = content.indexOf(bodyTag);
         realIndex = realIndex + bodyTag.length();
         char[] realContent = content.toCharArray();

@@ -5,10 +5,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import spellpad.filetype.parsing.SpellpadParser;
+import spellpad.swing.autocomplete.Resetable;
 
 /**
  *
@@ -17,6 +20,7 @@ import spellpad.filetype.parsing.SpellpadParser;
 public class OpenEventActionListener implements ActionListener {
 
     private JEditorPane textDocument;
+    private List<Resetable> resetList;
 
     public OpenEventActionListener(JEditorPane text) {
         textDocument = text;
@@ -37,6 +41,13 @@ public class OpenEventActionListener implements ActionListener {
         textDocument.setCaretPosition(0);
         textDocument.requestFocusInWindow();
     }
+    
+    public void addResetable(Resetable restter){
+        if(resetList == null){
+            resetList = new ArrayList<Resetable>();
+        }
+        resetList.add(restter);
+    }
 
     //@TODO: fix this!!!
     private void openFile(File chosenFile) {
@@ -55,6 +66,13 @@ public class OpenEventActionListener implements ActionListener {
             }
         } catch (IOException ex) {
             Logger.getLogger(OpenEventActionListener.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        resetWordCache();
+    }
+    
+    private void resetWordCache(){
+        for(Resetable resetter : resetList){
+            resetter.reset();
         }
     }
 }
