@@ -14,6 +14,7 @@ import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
 import spellpad.eventhandlers.textmodifying.*;
+import spellpad.swing.autocomplete.WordCountCache;
 
 /**
  * @author Jesse
@@ -23,6 +24,7 @@ public class SpellPadSwing {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
     public static final String CONTENT_TYPE = "text/html";
+    public static WordCountCache wordCache;
 
     public static void main(String[] args) {
         // TODO code application logic here
@@ -36,6 +38,7 @@ public class SpellPadSwing {
         setLookAndFeel();
         JFrame window = initFrame();
         SpellPadEditorPane editPane = initTextPane();
+        wordCache = new WordCountCache(editPane);
         JScrollPane textAreaScrollPane = addScrolling(editPane, window);
         JMenuBar menubar = initMenuBar(editPane, undoManager);
         JToolBar toolBar = initToolBar(editPane, undoManager);
@@ -46,10 +49,17 @@ public class SpellPadSwing {
         window.add(toolBar, BorderLayout.PAGE_START);
 
         editPane.getDocument().addUndoableEditListener(undoManager);
+        editPane.getDocument().addDocumentListener(new DocumentChangedActionListener(wordCache));
 
 
         editPane.requestFocus();
         window.setVisible(true);
+    }
+
+    private void getAndRegisterOpenEventListener(SpellPadEditorPane editPane, JMenuItem open) {
+        OpenEventActionListener openListener = new OpenEventActionListener(editPane);
+        openListener.addResetable(wordCache);
+        open.addActionListener(openListener);
     }
 
     private JToolBar initToolBar(SpellPadEditorPane editPane, UndoManager manager) {
@@ -64,7 +74,7 @@ public class SpellPadSwing {
         underlineButton.addActionListener(new UnderlineActionListener(editPane));
         undoButton.addActionListener(new UndoActionListener(manager));
         redoButton.addActionListener(new RedoActionListener(manager));
-        
+
         toolBar.add(boldButton);
         toolBar.add(italicButton);
         toolBar.add(underlineButton);
@@ -82,7 +92,7 @@ public class SpellPadSwing {
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-        open.addActionListener(new OpenEventActionListener(editPane));
+        getAndRegisterOpenEventListener(editPane, open);
         save.addActionListener(new SaveEventActionListener(editPane));
         exit.addActionListener(new ActionListener() {
 
@@ -95,7 +105,7 @@ public class SpellPadSwing {
         file.add(save);
         file.add(exit);
         menubar.add(file);
-        
+
         JMenu edit = new JMenu("Edit");
         JMenuItem bold = new JMenuItem("Bold");
         JMenuItem italic = new JMenuItem("Italic");
@@ -112,14 +122,14 @@ public class SpellPadSwing {
         underline.addActionListener(new UnderlineActionListener(editPane));
         undo.addActionListener(new UndoActionListener(manager));
         redo.addActionListener(new RedoActionListener(manager));
-        
+
         edit.add(bold);
         edit.add(italic);
         edit.add(underline);
         edit.add(undo);
         edit.add(redo);
         menubar.add(edit);
-        
+
         return menubar;
     }
 
