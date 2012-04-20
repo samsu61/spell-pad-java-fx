@@ -1,5 +1,7 @@
 package spellpad.swing.autocomplete;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -15,17 +17,20 @@ import javax.swing.text.Document;
  */
 public class WordCountCache implements Runnable, Resetable {
 
-    private HashMap<String, Integer> wordCounts = new HashMap<>();
+    //private HashMap<String, Integer> wordCounts = new HashMap<>();
+    private ArrayList<Entry> wordCounts = new ArrayList<Entry>();
+    private TernarySearchTree tree = new TernarySearchTree();
     private JTextPane textPane;
 
     public WordCountCache(JTextPane textPane) {
         this.textPane = textPane;
     }
 
-    public HashMap<String, Integer> getWordCount() {
+    public ArrayList<Entry> getWordCount() {
         return wordCounts;
     }
 
+    @Override
     public void reset() {
         wordCounts.clear();
     }
@@ -36,20 +41,32 @@ public class WordCountCache implements Runnable, Resetable {
             Document document = textPane.getDocument();
             String content = document.getText(0, document.getLength());
             Scanner scanner = new Scanner(content);
-            scanner.useDelimiter(Pattern.compile("\\s"));
+            scanner.useDelimiter(Pattern.compile("[\\s\\W]"));
 
+            scan:
             while (scanner.hasNext()) {
-                String key = scanner.next();
-                int value = 0;
-                if (wordCounts.containsKey(key)) {
-                    value = wordCounts.get(key);
+                String key = scanner.next().toLowerCase();
+                if (key.length() < 4) {
+                    continue;
                 }
-                wordCounts.put(key, ++value);
+                tree.add(key);
+                for (int i = 0; i < wordCounts.size(); i++) {
+                    if (key.equals(wordCounts.get(i).getWord())) {
+                        wordCounts.get(i).seenAnother();
+                        continue scan;
+                    }
+                }
+                wordCounts.add(new Entry(1, key));
             }
-            for (String key : wordCounts.keySet()) {
-                System.out.print(key);
+            System.out.println("before sort");
+            Collections.sort(wordCounts);
+            System.out.println("after sort");
+            for (Entry key : wordCounts) {
+                System.out.print(key.getWord());
                 System.out.print(":");
-                System.out.println(wordCounts.get(key));
+                System.out.print(key.getCount());
+                System.out.print(":");
+                System.out.println(tree.contains(key.getWord()));
             }
 
         } catch (BadLocationException ex) {
