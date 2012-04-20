@@ -63,6 +63,7 @@ public class DocumentChangedActionListener implements DocumentListener {
                 Logger.getLogger(RecountMethod.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("I printed");
+            cache.reset();
             new Thread(cache).start();
             runMe = false;
         }
