@@ -29,10 +29,15 @@ public class WordCountCache implements Runnable, Resetable {
     public ArrayList<Entry> getWordCount() {
         return wordCounts;
     }
+    
+    public TernarySearchTree getAutocompleteTree(){
+        return tree;
+    }
 
     @Override
     public void reset() {
         wordCounts.clear();
+        tree.reset();
     }
 
     @Override

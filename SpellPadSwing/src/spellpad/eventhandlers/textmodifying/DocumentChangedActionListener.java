@@ -2,9 +2,11 @@ package spellpad.eventhandlers.textmodifying;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import spellpad.swing.autocomplete.AutocompleteSuggestor;
 import spellpad.swing.autocomplete.WordCountCache;
 
 /**
@@ -16,15 +18,17 @@ public class DocumentChangedActionListener implements DocumentListener {
     private Thread recountThread = new Thread();
     private RecountMethod theRecount = new RecountMethod();
     WordCountCache cache;
+    JTextPane textArea;
 
-    public DocumentChangedActionListener(WordCountCache cache) {
-
+    public DocumentChangedActionListener(JTextPane area, WordCountCache cache) {
+        textArea = area;
         this.cache = cache;
     }
 
     @Override
     public void insertUpdate(DocumentEvent de) {
         scheduleRecount();
+        new Thread(new AutocompleteSuggestor(textArea, de, cache)).start();
 
     }
 

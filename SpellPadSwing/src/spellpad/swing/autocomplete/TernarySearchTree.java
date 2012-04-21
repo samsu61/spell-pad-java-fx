@@ -1,13 +1,15 @@
 package spellpad.swing.autocomplete;
 
+    
+
 /**
  *
  * @author Jesse Allen
  */
-public class TernarySearchTree {
+public class TernarySearchTree implements Resetable{
 
     private Node root = null;
-    
+
     public void add(String s) throws IllegalArgumentException {
         if (s == null || s.isEmpty()) {
             throw new IllegalArgumentException("String is null or empty");
@@ -23,21 +25,22 @@ public class TernarySearchTree {
             node = new Node(s.charAt(position), false);
             if (root == null) {
                 root = node;
-            } else
-            if(direction == 1){
+            } else if (direction == 1) {
                 old.setRightChild(node);
-            } else if(direction == -1){
+            } else if (direction == -1) {
                 old.setLeftChild(node);
             } else {
                 old.setMiddleChild(node);
             }
         }
-        if(s.length() <= position) return;
+        if (s.length() <= position) {
+            return;
+        }
         if (s.charAt(position) > node.getMyChar()) {
-            
+            node.increasePopularity();
             add(s, position, 1, node.getRightChild(), node);
         } else if (s.charAt(position) < node.getMyChar()) {
-            
+            node.increasePopularity();
             add(s, position, -1, node.getLeftChild(), node);
         } else {
             node.increasePopularity();
@@ -70,8 +73,47 @@ public class TernarySearchTree {
         }
         return false;
     }
-}
 
+    public String search(String s) {
+
+        if (s == null || s.isEmpty()) {
+            throw new IllegalArgumentException("String is null or empty");
+        }
+        int position = 0;
+        Node node = root;
+        while (node != null) {
+            int comparison = s.charAt(position) - node.getMyChar();
+            if (comparison < 0) {
+                node = node.getLeftChild();
+            } else if (comparison > 0) {
+                node = node.getRightChild();
+            } else {
+                if (++position == s.length()) {
+                    return findNearestWord(node);
+                }
+                node = node.getMiddleChild();
+            }
+        }
+        return "";
+    }
+    
+    private String findNearestWord(Node node){
+        StringBuilder suffix = new StringBuilder();
+        while(node != null){
+            suffix.append(node.getMyChar());
+            if(node.isWordEnd()){
+                return suffix.toString();
+            }
+            node = node.getMiddleChild();
+        }
+        return "";
+    }
+
+    @Override
+    public void reset() {
+        root = null;
+    }
+}
 class Node {
 
     private char myChar;

@@ -49,7 +49,7 @@ public class SpellPadSwing {
         window.add(toolBar, BorderLayout.PAGE_START);
 
         editPane.getDocument().addUndoableEditListener(undoManager);
-        editPane.getDocument().addDocumentListener(new DocumentChangedActionListener(wordCache));
+        editPane.getDocument().addDocumentListener(new DocumentChangedActionListener(editPane, wordCache));
 
 
         editPane.requestFocus();
