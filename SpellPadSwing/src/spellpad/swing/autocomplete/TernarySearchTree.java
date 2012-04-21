@@ -15,38 +15,36 @@ public class TernarySearchTree {
         if (s.length() < 4) {
             throw new IllegalArgumentException("String is shorter than length 4");
         }
-        add(s, 0, root);
+        add(s, 0, 0, root, null);
     }
 
-    private void add(String s, int position, Node node) {
+    private void add(String s, int position, int direction, Node node, Node old) {
         if (node == null) {
             node = new Node(s.charAt(position), false);
             if (root == null) {
                 root = node;
+            } else
+            if(direction == 1){
+                old.setRightChild(node);
+            } else if(direction == -1){
+                old.setLeftChild(node);
+            } else {
+                old.setMiddleChild(node);
             }
-            add(s, position + 1, node);
-            return;
         }
         if(s.length() <= position) return;
         if (s.charAt(position) > node.getMyChar()) {
-            if (node.getRightChild() == null) {
-                node.setRightChild(new Node(s.charAt(position++), false));
-            }
-            add(s, position, node.getRightChild());
+            
+            add(s, position, 1, node.getRightChild(), node);
         } else if (s.charAt(position) < node.getMyChar()) {
-            if (node.getLeftChild() == null) {
-                node.setLeftChild(new Node(s.charAt(position++), false));
-            }
-            add(s, position, node.getLeftChild());
+            
+            add(s, position, -1, node.getLeftChild(), node);
         } else {
             node.increasePopularity();
             if (position + 1 == s.length()) {
                 node.setWordEnd(true);
             } else {
-                if (node.getMiddleChild() == null) {
-                    node.setMiddleChild(new Node(s.charAt(position), false));
-                }
-                add(s, position + 1, node.getMiddleChild());
+                add(s, position + 1, 0, node.getMiddleChild(), node);
             }
         }
     }
@@ -66,10 +64,6 @@ public class TernarySearchTree {
             } else {
                 if (++position == s.length()) {
                     return node.isWordEnd();
-                }
-                if(node.getMiddleChild() == null){
-                    position ++;
-                    continue;
                 }
                 node = node.getMiddleChild();
             }
