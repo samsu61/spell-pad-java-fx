@@ -1,5 +1,6 @@
 package spellpad.eventhandlers;
 
+import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,6 +18,7 @@ final class FileFilterFactory {
 
     static FileChooserDetails getFileFromPopupDialogue(FileAction openOrSave) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("C:/"));
         fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
         int response = openOrSave == FileAction.SAVE
                 ? fileChooser.showSaveDialog(null)
@@ -27,7 +29,7 @@ final class FileFilterFactory {
         FileChooserDetails thisChoosersDetails =
                 new FileChooserDetails(
                 fileChooser.getSelectedFile(),
-                (FileNameExtensionFilter) fileChooser.getFileFilter());
+                (FileNameExtensionFilter) fileChooser.getFileFilter());        
         return thisChoosersDetails;
     }
 }
