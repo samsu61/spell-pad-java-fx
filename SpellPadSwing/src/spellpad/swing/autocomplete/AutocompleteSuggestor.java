@@ -49,6 +49,7 @@ public class AutocompleteSuggestor implements Runnable {
         }
         String prefix = content.substring(wordStart + 1, position).toLowerCase();
         String suffix = countCache.getAutocompleteTree().search(prefix);
+        suffix = suffix.substring(1);
         if(!suffix.equals("")){
             try {
                 //A suffix was found
