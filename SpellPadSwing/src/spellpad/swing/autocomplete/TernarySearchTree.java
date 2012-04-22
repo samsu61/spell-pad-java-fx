@@ -25,9 +25,9 @@ public class TernarySearchTree implements Resetable{
             node = new Node(s.charAt(position), false);
             if (root == null) {
                 root = node;
-            } else if (direction == 1) {
+            } else if (direction > 0) {
                 old.setRightChild(node);
-            } else if (direction == -1) {
+            } else if (direction < 0) {
                 old.setLeftChild(node);
             } else {
                 old.setMiddleChild(node);

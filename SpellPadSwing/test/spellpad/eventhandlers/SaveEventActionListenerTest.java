@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.*;
@@ -51,10 +52,10 @@ public class SaveEventActionListenerTest {
      * Test of actionPerformed method, of class SaveEventActionListener.
      */
     @Test
-    public void testActionPerformed() {
+    public void testActionPerformedNullInputs() {
         System.out.println("saveActionPerformed-null-null");
         ActionEvent e = null;
-        JEditorPane textArea = new JEditorPane();
+        JEditorPane textArea = new JTextPane();
         SaveEventActionListener instance = new SaveEventActionListener(null);
         String s = "This is some sample text.";
         textArea.setText(s);
@@ -66,10 +67,10 @@ public class SaveEventActionListenerTest {
      * Test of actionPerformed method, of class SaveEventActionListener.
      */
     @Test
-    public void testActionPerformed2() {
+    public void testActionPerformed2EventNotNullTextPaneNull() {
         System.out.println("saveActionPerformed-notnull-null");
         ActionEvent e = new ActionEvent(new Object(), 0, null);
-        JEditorPane textArea = new JEditorPane();
+        JEditorPane textArea = new JTextPane();
         SaveEventActionListener instance = new SaveEventActionListener(null);
         String s = "This is some sample text.";
         textArea.setText(s);
@@ -81,10 +82,10 @@ public class SaveEventActionListenerTest {
      * Test of actionPerformed method, of class SaveEventActionListener.
      */
     @Test
-    public void testActionPerformed3() {
+    public void testActionPerformedEventNullTextPaneNotNull() {
         System.out.println("saveActionPerformed-null-notnull");
         ActionEvent e = null;
-        JEditorPane textArea = new JEditorPane();
+        JEditorPane textArea = new JTextPane();
         SaveEventActionListener instance = new SaveEventActionListener(textArea);
         String s = "This is some sample text.";
         textArea.setText(s);
@@ -96,7 +97,7 @@ public class SaveEventActionListenerTest {
      * Test of actionPerformed method, of class SaveEventActionListener.
      */
     @Test
-    public void testActionPerformed4() {
+    public void testActionPerformedValidInputs() {
         System.out.println("saveActionPerformed-notnull-notnull");
         ActionEvent e = new ActionEvent(new Object(), 0, null);
         JEditorPane textArea = new JEditorPane();
