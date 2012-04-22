@@ -102,7 +102,7 @@ public class TernarySearchTree implements Resetable{
         while(node != null){
             suffix.append(node.getMyChar());
             if(node.isWordEnd()){
-                return suffix.toString();
+                return suffix.toString().substring(1);
             }
             node = node.getMiddleChild();
         }
@@ -172,9 +172,5 @@ class Node {
 
     public int getPopularity() {
         return popularity;
-    }
-
-    public void setPopularity(int popularity) {
-        this.popularity = popularity;
     }
 }
