@@ -35,9 +35,8 @@ public class AutocompleteSuggestor implements Runnable {
     }
 
     private void bindKeys() {
-        textArea.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), COMMIT_ACTION);
-        textArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
-                ActionEvent.CTRL_MASK), COMMIT_ACTION2);
+        textArea.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), COMMIT_ACTION);
+        textArea.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), COMMIT_ACTION2);
         textArea.getActionMap().put(COMMIT_ACTION, new CommitActionNormal());
         textArea.getActionMap().put(COMMIT_ACTION2, new CommitActionNonNormal());
     }
@@ -120,7 +119,7 @@ public class AutocompleteSuggestor implements Runnable {
 
                 mode = Mode.INSERT;
             } else {
-                textArea.replaceSelection("\n");
+                textArea.replaceSelection(" ");
             }
         }
 
