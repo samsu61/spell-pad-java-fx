@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class TernarySearchTree implements Resetable {
 
-    private Node root = null;
+    protected Node root = null;
 
     public void add(String s) throws IllegalArgumentException {
         if (s == null || s.isEmpty()) {
