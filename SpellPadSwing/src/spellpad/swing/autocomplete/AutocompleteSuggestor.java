@@ -109,6 +109,7 @@ public class AutocompleteSuggestor implements Runnable {
         return wordStart;
     }
 
+    
     private abstract class CommitAction extends AbstractAction {
 
         @Override
@@ -116,14 +117,14 @@ public class AutocompleteSuggestor implements Runnable {
             if (mode == Mode.COMPLETION) {
                 int position = textArea.getSelectionEnd();
                 doimpl(position);
-
                 mode = Mode.INSERT;
             } else {
-                textArea.replaceSelection(" ");
+                doInsert();
             }
         }
 
         abstract void doimpl(int position);
+        abstract void doInsert();
     }
 
     private class CommitActionNormal extends CommitAction {
@@ -131,11 +132,17 @@ public class AutocompleteSuggestor implements Runnable {
         @Override
         void doimpl(int position) {
             try {
-                textArea.getDocument().insertString(position, " ", null);
-                textArea.setCaretPosition(position + 1);
+                textArea.getDocument().insertString(position, "", null);
+                textArea.setCaretPosition(position);
             } catch (BadLocationException ex) {
                 Logger.getLogger(AutocompleteSuggestor.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+
+        @Override
+        void doInsert() {
+            //Nothing. Failure behaves as it should because swing does
+            //what it does. I believe swing binds the spacebar.
         }
     }
 
@@ -144,6 +151,15 @@ public class AutocompleteSuggestor implements Runnable {
         @Override
         void doimpl(int position) {
             textArea.setCaretPosition(position);
+        }
+
+        @Override
+        void doInsert() {
+            try {
+                textArea.getDocument().insertString(textArea.getCaretPosition(), "\n", null);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(AutocompleteSuggestor.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
