@@ -1,6 +1,7 @@
 package spellpad.swing.autocomplete;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  *
@@ -43,4 +44,32 @@ public class Entry implements Comparable<Entry> {
         }
         return this.word.length() - o.getWord().length();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Entry other = (Entry) obj;
+        if (!Objects.equals(this.word, other.word)) {
+            return false;
+        }
+        if (this.count != other.count) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.word);
+        hash = 79 * hash + this.count;
+        return hash;
+    }
+    
+    
 }

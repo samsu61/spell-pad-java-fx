@@ -1,12 +1,12 @@
 package spellpad.swing.autocomplete;
 
-    
+import java.util.Objects;
 
 /**
  *
  * @author Jesse Allen
  */
-public class TernarySearchTree implements Resetable{
+public class TernarySearchTree implements Resetable {
 
     private Node root = null;
 
@@ -96,12 +96,12 @@ public class TernarySearchTree implements Resetable{
         }
         return "";
     }
-    
-    private String findNearestWord(Node node){
+
+    private String findNearestWord(Node node) {
         StringBuilder suffix = new StringBuilder();
-        while(node != null){
+        while (node != null) {
             suffix.append(node.getMyChar());
-            if(node.isWordEnd()){
+            if (node.isWordEnd()) {
                 return suffix.toString().substring(1);
             }
             node = node.getMiddleChild();
@@ -113,7 +113,30 @@ public class TernarySearchTree implements Resetable{
     public void reset() {
         root = null;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TernarySearchTree other = (TernarySearchTree) obj;
+        if (!Objects.equals(this.root, other.root)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.root);
+        return hash;
+    }
 }
+
 class Node {
 
     private char myChar;
@@ -172,5 +195,47 @@ class Node {
 
     public int getPopularity() {
         return popularity;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (this.myChar != other.myChar) {
+            return false;
+        }
+        if (!Objects.equals(this.leftChild, other.leftChild)) {
+            return false;
+        }
+        if (!Objects.equals(this.middleChild, other.middleChild)) {
+            return false;
+        }
+        if (!Objects.equals(this.rightChild, other.rightChild)) {
+            return false;
+        }
+        if (this.wordEnd != other.wordEnd) {
+            return false;
+        }
+        if (this.popularity != other.popularity) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + this.myChar;
+        hash = 53 * hash + Objects.hashCode(this.leftChild);
+        hash = 53 * hash + Objects.hashCode(this.middleChild);
+        hash = 53 * hash + Objects.hashCode(this.rightChild);
+        hash = 53 * hash + (this.wordEnd ? 1 : 0);
+        hash = 53 * hash + this.popularity;
+        return hash;
     }
 }

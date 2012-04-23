@@ -8,15 +8,15 @@ import java.util.TimerTask;
  */
 public class RecountMethod extends TimerTask implements Runnable {
 
-        WordCountCache cache;
-        
-        public RecountMethod(WordCountCache cache){
-            this.cache = cache;
-        }
-        
-        @Override
-        public void run() {
-            cache.reset();
-            new Thread(cache).start();
-        }
+    WordCountCache cache;
+
+    public RecountMethod(WordCountCache cache) {
+        this.cache = cache;
     }
+
+    @Override
+    public void run() {
+        cache.reset();
+        new Thread(cache).start();
+    }
+}

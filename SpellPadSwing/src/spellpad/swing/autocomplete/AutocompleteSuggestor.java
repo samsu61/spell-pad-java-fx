@@ -1,7 +1,6 @@
 package spellpad.swing.autocomplete;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -69,10 +68,6 @@ public class AutocompleteSuggestor implements Runnable {
         if (!suffix.equals("")) {
             appendSuffix(position, suffix);
         }
-        clearEvent();
-    }
-
-    private void clearEvent() {
         event = null;
     }
 
@@ -109,7 +104,6 @@ public class AutocompleteSuggestor implements Runnable {
         return wordStart;
     }
 
-    
     private abstract class CommitAction extends AbstractAction {
 
         @Override
@@ -124,6 +118,7 @@ public class AutocompleteSuggestor implements Runnable {
         }
 
         abstract void doimpl(int position);
+
         abstract void doInsert();
     }
 
