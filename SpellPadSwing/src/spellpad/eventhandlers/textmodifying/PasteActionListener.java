@@ -11,6 +11,9 @@ import spellpad.eventhandlers.ClipboardHandler;
 import spellpad.eventhandlers.mouse.RightClickPopupMenu;
 
 /**
+ * TODO: FIX THIS CLASS!
+ */
+/**
  *
  * @author Jesse Allen
  */

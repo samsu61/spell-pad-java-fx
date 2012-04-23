@@ -17,9 +17,7 @@ final class FileFilterFactory {
     }
 
     static FileChooserDetails getFileFromPopupDialogue(FileAction openOrSave) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File("C:/"));
-        fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
+        JFileChooser fileChooser = getFileChooser();
         int response = openOrSave == FileAction.SAVE
                 ? fileChooser.showSaveDialog(null)
                 : fileChooser.showOpenDialog(null);
@@ -31,5 +29,12 @@ final class FileFilterFactory {
                 fileChooser.getSelectedFile(),
                 (FileNameExtensionFilter) fileChooser.getFileFilter());        
         return thisChoosersDetails;
+    }
+
+    private static JFileChooser getFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("C:/"));
+        fileChooser.setFileFilter(FileFilterFactory.getSpellpadFileFilter());
+        return fileChooser;
     }
 }

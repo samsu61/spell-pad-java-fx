@@ -29,8 +29,8 @@ public class WordCountCache implements Runnable, Resetable {
     public ArrayList<Entry> getWordCount() {
         return wordCounts;
     }
-    
-    public TernarySearchTree getAutocompleteTree(){
+
+    public TernarySearchTree getAutocompleteTree() {
         return tree;
     }
 

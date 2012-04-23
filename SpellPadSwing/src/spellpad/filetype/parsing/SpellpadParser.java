@@ -3,7 +3,6 @@ package spellpad.filetype.parsing;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 
-
 /**
  * @author Jesse
  */

@@ -41,10 +41,10 @@ public class OpenEventActionListener implements ActionListener {
         textDocument.setCaretPosition(0);
         textDocument.requestFocusInWindow();
     }
-    
-    public void addResetable(Resetable restter){
-        if(resetList == null){
-            resetList = new ArrayList<Resetable>();
+
+    public void addResetable(Resetable restter) {
+        if (resetList == null) {
+            resetList = new ArrayList<>();
         }
         resetList.add(restter);
     }
@@ -69,9 +69,9 @@ public class OpenEventActionListener implements ActionListener {
         }
         resetWordCache();
     }
-    
-    private void resetWordCache(){
-        for(Resetable resetter : resetList){
+
+    private void resetWordCache() {
+        for (Resetable resetter : resetList) {
             resetter.reset();
         }
     }
