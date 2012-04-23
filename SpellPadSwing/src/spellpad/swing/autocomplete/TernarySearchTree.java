@@ -21,6 +21,7 @@ public class TernarySearchTree implements Resetable {
     }
 
     private void add(String s, int position, int direction, Node node, Node old) {
+        //make new variable instead. assigning new values to input variables is bad form.
         if (node == null) {
             node = new Node(s.charAt(position), false);
             if (root == null) {
@@ -58,20 +59,21 @@ public class TernarySearchTree implements Resetable {
         }
         int position = 0;
         Node node = root;
+        boolean isInTree = false;
         while (node != null) {
             int comparison = s.charAt(position) - node.getMyChar();
             if (comparison < 0) {
                 node = node.getLeftChild();
             } else if (comparison > 0) {
                 node = node.getRightChild();
+            } else if (++position == s.length()) {
+                isInTree = node.isWordEnd();
+                node = null;
             } else {
-                if (++position == s.length()) {
-                    return node.isWordEnd();
-                }
                 node = node.getMiddleChild();
             }
         }
-        return false;
+        return isInTree;
     }
 
     public String search(String s) {
@@ -134,6 +136,8 @@ public class TernarySearchTree implements Resetable {
         int hash = 5;
         hash = 67 * hash + Objects.hashCode(this.root);
         return hash;
+
+
     }
 }
 
