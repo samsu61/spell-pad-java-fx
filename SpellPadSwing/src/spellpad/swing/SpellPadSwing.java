@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
 import javax.swing.undo.UndoManager;
+import spellpad.dictionary.DictionaryLoader;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
@@ -28,10 +29,17 @@ public class SpellPadSwing {
     public static final String CONTENT_TYPE = "text/html";
     public static WordCountCache wordCache;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
+        DictionaryLoader loader = new DictionaryLoader();
+        new Thread(loader).start();
         SpellPadSwing spellpad = new SpellPadSwing();
         spellpad.init();
+        while(!loader.isExecutionComplete()){
+            System.out.println("sleeping.");
+            Thread.sleep(125);
+        }
+        wordCache.setDictionary(loader.getTree());
     }
 
     public void init() {
@@ -52,7 +60,6 @@ public class SpellPadSwing {
 
         editPane.getDocument().addUndoableEditListener(undoManager);
         editPane.getDocument().addDocumentListener(new DocumentChangedActionListener(editPane, wordCache));
-
 
         editPane.requestFocus();
         window.setVisible(true);

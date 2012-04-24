@@ -17,10 +17,20 @@ import javax.swing.text.Document;
  */
 public class WordCountCache implements Runnable, Resetable {
 
-    //private HashMap<String, Integer> wordCounts = new HashMap<>();
     private ArrayList<Entry> wordCounts = new ArrayList<>();
     private TernarySearchTree tree = new TernarySearchTree();
+    private TernarySearchTree dictionary;
     private JTextPane textPane;
+
+    public void setDictionary(TernarySearchTree dictionary) {
+        this.dictionary = dictionary;
+    }
+
+    public TernarySearchTree getDictionary() {
+        return dictionary;
+    }
+    
+    
 
     public WordCountCache(JTextPane textPane) {
         this.textPane = textPane;
@@ -63,16 +73,7 @@ public class WordCountCache implements Runnable, Resetable {
                 }
                 wordCounts.add(new Entry(1, key));
             }
-            System.out.println("before sort");
             Collections.sort(wordCounts);
-            System.out.println("after sort");
-            for (Entry key : wordCounts) {
-                System.out.print(key.getWord());
-                System.out.print(":");
-                System.out.print(key.getCount());
-                System.out.print(":");
-                System.out.println(tree.contains(key.getWord()));
-            }
 
         } catch (BadLocationException ex) {
             Logger.getLogger(WordCountCache.class.getName()).log(Level.SEVERE, null, ex);

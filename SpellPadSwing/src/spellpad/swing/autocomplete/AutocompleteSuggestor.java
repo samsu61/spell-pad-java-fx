@@ -67,6 +67,9 @@ public class AutocompleteSuggestor implements Runnable {
         }
         String prefix = content.substring(wordStart + 1, position + 1).toLowerCase();
         String suffix = countCache.getAutocompleteTree().search(prefix);
+        if(suffix.equals("")){
+            suffix = countCache.getDictionary().search(prefix);
+        }
         if (!suffix.equals("")) {
             appendSuffix(position, suffix);
         }
