@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="ELIZABETH" name="spellpad.eventhandlers.OpenEventActionListenerTest" tests="4" time="3.604" timestamp="2012-04-23T15:35:41">
+<testsuite errors="0" failures="0" hostname="ELIZABETH" name="spellpad.eventhandlers.OpenEventActionListenerTest" tests="4" time="3.885" timestamp="2012-04-24T15:12:58">
   <properties>
     <property name="netbeans.autoupdate.country" value="US" />
     <property name="javac.test.classpath" value="C:\Users\Jesse Allen\Documents\NetBeansProjects\External Jars\Class Library\jsoup-1.6.2.jar:C:\Users\Jesse Allen\Documents\NetBeansProjects\External Jars\Class Library\commons-lang3-3.1.jar:build/classes:C:\Program Files\NetBeans 7.1.1\platform\modules\ext\junit-4.10.jar" />
@@ -40,7 +40,7 @@
     <property name="copylibs.rebase" value="true" />
     <property name="manifest.available+main.class" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner spellpad.eventhandlers.OpenEventActionListenerTest filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\test\results\TEST-spellpad.eventhandlers.OpenEventActionListenerTest.xml crashfile=C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\junitvmwatcher490955602180434855.properties propsfile=C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\junit4964881179837791634.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner spellpad.eventhandlers.OpenEventActionListenerTest filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\test\results\TEST-spellpad.eventhandlers.OpenEventActionListenerTest.xml crashfile=C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\junitvmwatcher2843874461093599390.properties propsfile=C:\Users\Jesse Allen\Documents\NetBeansProjects\spell-pad-java-fx\SpellPadSwing\build\junit7605786251905708510.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -82,7 +82,6 @@
     <property name="sun.java.launcher" value="SUN_STANDARD" />
     <property name="libs.junit.classpath" value="C:\Program Files\NetBeans 7.1.1\java\modules\ext\junit-3.8.2.jar" />
     <property name="libs.jaxb.javadoc" value="C:\Program Files\NetBeans 7.1.1\ide\docs\jaxb-api-doc.zip" />
-    <property name="org.openide.awt.SwingBrowserImpl.do-not-block-awt" value="false" />
     <property name="ant.home" value="C:\Program Files\NetBeans 7.1.1\java\ant" />
     <property name="libs.junit_4.src" value="C:\Program Files\NetBeans 7.1.1\java\docs\junit-4.10-sources.jar" />
     <property name="libs.absolutelayout.maven-pom" value="" />
@@ -293,10 +292,10 @@
     <property name="platform.active" value="default_platform" />
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
   </properties>
-  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed" time="0.0" />
+  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed" time="0.015" />
   <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed2" time="0.015" />
-  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed3" time="2.091" />
-  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed4" time="1.295" />
+  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed3" time="2.122" />
+  <testcase classname="spellpad.eventhandlers.OpenEventActionListenerTest" name="testActionPerformed4" time="1.529" />
   <system-out><![CDATA[openactionPerformed-null-null
 actionPerformed-notnull-null
 actionPerformed-null-notnull
