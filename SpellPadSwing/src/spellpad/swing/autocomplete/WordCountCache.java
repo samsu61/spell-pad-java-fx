@@ -18,7 +18,7 @@ import javax.swing.text.Document;
 public class WordCountCache implements Runnable, Resetable {
 
     //private HashMap<String, Integer> wordCounts = new HashMap<>();
-    private ArrayList<Entry> wordCounts = new ArrayList<Entry>();
+    private ArrayList<Entry> wordCounts = new ArrayList<>();
     private TernarySearchTree tree = new TernarySearchTree();
     private JTextPane textPane;
 

@@ -51,6 +51,8 @@ public class AutocompleteSuggestor implements Runnable {
             System.err.println("No event was updated to this suggestor");
             return;
         }
+        //grab local cache of event
+        DocumentEvent event = this.event;
         if (event.getLength() != 1) {
             return;
         }
