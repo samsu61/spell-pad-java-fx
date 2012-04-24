@@ -23,7 +23,7 @@ public class DictionaryLoader implements Runnable {
     public void run() {
         try(Scanner input = new Scanner(new FileInputStream(dictionary))){
             while(input.hasNext()){
-                tree.add(input.nextLine());
+                tree.add(input.nextLine().toLowerCase());
             }
         }catch(IOException ex){
             Logger.getLogger(DictionaryLoader.class.getName()).log(Level.SEVERE, null, ex);
