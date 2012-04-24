@@ -9,80 +9,86 @@ import java.util.Objects;
 public class TernarySearchTree implements Resetable {
 
     private Node root = null;
-    
-    public void balance(){
+
+    public void balance() {
         balance(root);
     }
-    
-    void balance(Node amIBalanced){
+
+    void balance(Node amIBalanced) {
         root.updateHeight(root);
         rotate(amIBalanced);
     }
-    
-    private void rotate(Node unbalanced){
+
+    private void rotate(Node unbalanced) {
         int balance = unbalanced.getBalance();
-        if(balance < -1){
+        if (balance < -1) {
             rotateLeft(unbalanced);
-        }else if(balance > 1){
+        } else if (balance > 1) {
             rotateRight(unbalanced);
         }
     }
-    
-    private void rotateRight(Node unbalanced){
+
+    private void rotateRight(Node unbalanced) {
         int balance = unbalanced.getLeftChild().getBalance();
-        if(balance < 0){
+        if (balance < 0) {
             //rotateleft left child
         }
         Node child = unbalanced.getLeftChild();
         Node children = child.getRightChild();
         Node parent = unbalanced.getParent();
         child.setParent(parent);
-        if(parent != null){
-            if(parent.getRightChild() == unbalanced){
+        if (parent != null) {
+            if (parent.getRightChild() == unbalanced) {
                 parent.setRightChild(child);
-            }else{
+            } else {
                 parent.setLeftChild(child);
             }
         }
         unbalanced.setLeftChild(children);
-        if(children != null){
+        if (children != null) {
             children.setParent(unbalanced);
         }
         child.setRightChild(unbalanced);
         unbalanced.setParent(child);
-        if(root == unbalanced)root = child;
+        if (root == unbalanced) {
+            root = child;
+        }
     }
-    
-    private void rotateLeft(Node unbalanced){
+
+    private void rotateLeft(Node unbalanced) {
         int balance = unbalanced.getRightChild().getBalance();
-        if(balance > 0){
+        if (balance > 0) {
             rotateRight(unbalanced.getRightChild());
         }
         Node child = unbalanced.getRightChild();
         Node children = child.getLeftChild();
         Node parent = unbalanced.getParent();
         child.setParent(parent);
-        if(parent != null){
-            if(parent.getRightChild() == unbalanced) parent.setRightChild(child);
-            else parent.setLeftChild(child);
+        if (parent != null) {
+            if (parent.getRightChild() == unbalanced) {
+                parent.setRightChild(child);
+            } else {
+                parent.setLeftChild(child);
+            }
         }
         unbalanced.setRightChild(children);
-        if(children != null){
+        if (children != null) {
             children.setParent(unbalanced);
         }
         child.setLeftChild(unbalanced);
         unbalanced.setParent(child);
-        if(root == unbalanced) root = child;
+        if (root == unbalanced) {
+            root = child;
+        }
     }
-    
 
     public void add(String s) throws IllegalArgumentException {
         if (s == null || s.isEmpty()) {
             throw new IllegalArgumentException("String is null or empty");
         }
-        if (s.length() < 4) {
-            throw new IllegalArgumentException("String is shorter than length 4");
-        }
+//        if (s.length() < 4) {
+//            throw new IllegalArgumentException("String is shorter than length 4");
+//        }
         add(s, 0, 0, root, null);
         balance(root);
     }
@@ -208,7 +214,6 @@ public class TernarySearchTree implements Resetable {
 
     }
 }
-
 
 class Node {
 
