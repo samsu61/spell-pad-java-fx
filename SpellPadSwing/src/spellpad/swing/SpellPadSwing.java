@@ -6,7 +6,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
@@ -15,6 +14,7 @@ import javax.swing.undo.UndoManager;
 import spellpad.dictionary.DictionaryLoader;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
+import spellpad.eventhandlers.SpellCheckChoiceActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
 import spellpad.eventhandlers.textmodifying.*;
 import spellpad.swing.autocomplete.WordCountCache;
@@ -138,6 +138,12 @@ public class SpellPadSwing {
         edit.add(undo);
         edit.add(redo);
         menubar.add(edit);
+        
+        JMenu settings = new JMenu("Settings");
+        JMenuItem spellCheckChoice = new JMenuItem("Dictionary");
+        spellCheckChoice.addActionListener(new SpellCheckChoiceActionListener(spellCheckChoice));
+        settings.add(spellCheckChoice);
+        menubar.add(settings);
 
         return menubar;
     }
@@ -178,4 +184,6 @@ public class SpellPadSwing {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return window;
     }
+
+    
 }

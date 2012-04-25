@@ -53,6 +53,8 @@ public class AutocompleteSuggestor implements Runnable {
         }
         if(textArea.getSelectedText() == null){
             mode = Mode.INSERT;
+        }else{
+            return;
         }
         //grab local cache of event
         DocumentEvent event = this.event;
@@ -60,6 +62,8 @@ public class AutocompleteSuggestor implements Runnable {
             return;
         }
         int position = event.getOffset();
+        
+        
         String content = getContent();
         int wordStart = getWordStart(position, content);
 
@@ -87,8 +91,9 @@ public class AutocompleteSuggestor implements Runnable {
         } catch (BadLocationException ex) {
             Logger.getLogger(AutocompleteSuggestor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        int caretLoc = textArea.getCaretPosition();
         textArea.setCaretPosition(position + suffix.length() + 1);
-        textArea.moveCaretPosition(position + 1);
+        textArea.moveCaretPosition(caretLoc);
         mode = Mode.COMPLETION;
     }
 
@@ -105,7 +110,7 @@ public class AutocompleteSuggestor implements Runnable {
 
     private int getWordStart(int position, String content) {
         int wordStart;
-        for (wordStart = position; wordStart >= 0; wordStart--) {
+        for (wordStart = position-1; wordStart >= 0; wordStart--) {
             if (!Character.isLetter(content.charAt(wordStart))) {
                 break;
             }
