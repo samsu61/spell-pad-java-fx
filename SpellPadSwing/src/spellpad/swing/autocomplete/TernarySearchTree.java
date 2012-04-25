@@ -15,7 +15,6 @@ public class TernarySearchTree implements Resetable {
     }
 
     void balance(Node amIBalanced) {
-        root.updateHeight(root);
         rotate(amIBalanced);
     }
 
@@ -26,6 +25,10 @@ public class TernarySearchTree implements Resetable {
         } else if (balance > 1) {
             rotateRight(unbalanced);
         }
+        if (unbalanced.getMiddleChild() != null) {
+            balance(unbalanced.getMiddleChild());
+        }
+
     }
 
     private void rotateRight(Node unbalanced) {
@@ -90,7 +93,7 @@ public class TernarySearchTree implements Resetable {
 //            throw new IllegalArgumentException("String is shorter than length 4");
 //        }
         add(s, 0, 0, root, null);
-        balance(root);
+        //balance();
     }
 
     private void add(String s, int position, int direction, Node node, Node old) {
@@ -119,12 +122,89 @@ public class TernarySearchTree implements Resetable {
             add(s, position, -1, node.getLeftChild(), node);
         } else {
             node.increasePopularity();
+            node.increasePopularity();
             if (position + 1 == s.length()) {
                 node.setWordEnd(true);
             } else {
                 add(s, position + 1, 0, node.getMiddleChild(), node);
             }
         }
+    }
+
+    private Node noneAreNull(Node right, Node left, Node center, Node node, StringBuilder suffix) {
+        //None are null
+        int r = right.getPopularity();
+        int l = left.getPopularity();
+        int c = center.getPopularity();
+        if (r > l) {
+            if (r > c) {
+                node = right;
+            } else {
+                suffix.append(node.getMyChar());
+                node = center;
+            }
+        } else if (l > r) {
+            if (l > c) {
+                node = left;
+            } else {
+                suffix.append(node.getMyChar());
+                node = center;
+            }
+        }
+        return node;
+    }
+
+    private Node oneIsNull(Node center, Node left, Node node, Node right, StringBuilder suffix) {
+        if (center == null && right == null && left == null) {
+            node = null;
+        } else if (center == null) {
+            if (left == null) {
+                node = right;
+            } else if (right == null) {
+                node = left;
+            } else {
+                int r = right.getPopularity();
+                int l = left.getPopularity();
+                if (r > l) {
+                    node = right;
+                } else {
+                    node = left;
+                }
+            }
+        } else {
+            if (right == null) {
+                if (left == null) {
+                    suffix.append(node.getMyChar());
+                    node = center;
+                } else {
+                    int l = left.getPopularity();
+                    int c = center.getPopularity();
+                    if (l > c) {
+                        node = left;
+                    } else {
+                        suffix.append(node.getMyChar());
+                        node = center;
+                    }
+                }
+            } else/*
+             * left is null
+             */ {
+                if (right == null) {
+                    suffix.append(node.getMyChar());
+                    node = center;
+                } else {
+                    int r = right.getPopularity();
+                    int c = center.getPopularity();
+                    if (r > c) {
+                        node = right;
+                    } else {
+                        suffix.append(node.getMyChar());
+                        node = center;
+                    }
+                }
+            }
+        }
+        return node;
     }
 
     public boolean contains(String s) {
@@ -173,16 +253,41 @@ public class TernarySearchTree implements Resetable {
         return "";
     }
 
-    private String findNearestWord(Node node) {
+    private String findNearestWord(Node n) {
         StringBuilder suffix = new StringBuilder();
-        while (node != null) {
-            suffix.append(node.getMyChar());
-            if (node.isWordEnd()) {
-                return suffix.toString().substring(1);
+        Node right;
+        Node left;
+        Node center;
+        Node node = n;
+//        while (node != null) {
+//            if (node.isWordEnd()) {
+//                suffix.append(node.getMyChar());
+//                node = null;
+//                continue;
+//            }
+//            right = node.getRightChild();
+//            left = node.getLeftChild();
+//            center = node.getMiddleChild();
+//            if (right == null || left == null || center == null) {
+//                node = oneIsNull(center, left, node, right, suffix);
+//            } else {
+//                node = noneAreNull(right, left, center, node, suffix);
+//            }
+//        }
+        if (suffix.toString().equals("")) {
+            node = n;
+            while (node != null) {
+                if (node.isWordEnd()) {
+                    suffix.append(node.getMyChar());
+                    node = null;
+                } else {
+                    suffix.append(node.getMyChar());
+                    node = node.getMiddleChild();
+                }
+
             }
-            node = node.getMiddleChild();
         }
-        return "";
+        return suffix.substring(1);
     }
 
     @Override
@@ -230,11 +335,16 @@ class Node {
     }
 
     int updateHeight(Node n) {
+        int height;
         if (n == null) {
-            return -1;
+            height = -1;
         } else {
-            return Math.max(updateHeight(n.getLeftChild()), updateHeight(n.getRightChild())) + 1;
+            int heightLeft = updateHeight(n.getLeftChild());
+            int heightRight = updateHeight(n.getRightChild());
+            height = Math.max(heightLeft, heightRight) + 1;
+            n.height = height;
         }
+        return height;
     }
 
     int getBalance() {
