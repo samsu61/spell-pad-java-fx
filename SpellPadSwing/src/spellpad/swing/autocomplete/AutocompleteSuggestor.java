@@ -51,6 +51,9 @@ public class AutocompleteSuggestor implements Runnable {
             System.err.println("No event was updated to this suggestor");
             return;
         }
+        if(textArea.getSelectedText() == null){
+            mode = Mode.INSERT;
+        }
         //grab local cache of event
         DocumentEvent event = this.event;
         if (event.getLength() != 1) {
@@ -66,7 +69,8 @@ public class AutocompleteSuggestor implements Runnable {
             return;
         }
         String prefix = content.substring(wordStart + 1, position + 1).toLowerCase();
-        String suffix = countCache.getAutocompleteTree().search(prefix);
+        //String suffix = countCache.getAutocompleteTree().search(prefix);
+        String suffix = "";
         if(suffix.equals("")){
             suffix = countCache.getDictionary().search(prefix);
         }
