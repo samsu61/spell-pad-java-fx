@@ -114,15 +114,12 @@ public class TernarySearchTree implements Resetable {
         if (s.length() <= position) {
             return;
         }
+        node.increasePopularity();
         if (s.charAt(position) > node.getMyChar()) {
-            node.increasePopularity();
             add(s, position, 1, node.getRightChild(), node);
         } else if (s.charAt(position) < node.getMyChar()) {
-            node.increasePopularity();
             add(s, position, -1, node.getLeftChild(), node);
         } else {
-            node.increasePopularity();
-            node.increasePopularity();
             if (position + 1 == s.length()) {
                 node.setWordEnd(true);
             } else {
@@ -140,14 +137,12 @@ public class TernarySearchTree implements Resetable {
             if (r > c) {
                 node = right;
             } else {
-                suffix.append(node.getMyChar());
                 node = center;
             }
         } else if (l > r) {
             if (l > c) {
                 node = left;
             } else {
-                suffix.append(node.getMyChar());
                 node = center;
             }
         }
@@ -174,7 +169,6 @@ public class TernarySearchTree implements Resetable {
         } else {
             if (right == null) {
                 if (left == null) {
-                    suffix.append(node.getMyChar());
                     node = center;
                 } else {
                     int l = left.getPopularity();
@@ -182,7 +176,6 @@ public class TernarySearchTree implements Resetable {
                     if (l > c) {
                         node = left;
                     } else {
-                        suffix.append(node.getMyChar());
                         node = center;
                     }
                 }
@@ -190,7 +183,6 @@ public class TernarySearchTree implements Resetable {
              * left is null
              */ {
                 if (right == null) {
-                    suffix.append(node.getMyChar());
                     node = center;
                 } else {
                     int r = right.getPopularity();
@@ -198,7 +190,6 @@ public class TernarySearchTree implements Resetable {
                     if (r > c) {
                         node = right;
                     } else {
-                        suffix.append(node.getMyChar());
                         node = center;
                     }
                 }
@@ -245,6 +236,9 @@ public class TernarySearchTree implements Resetable {
                 node = node.getRightChild();
             } else {
                 if (++position == s.length()) {
+                    if(node.isWordEnd()){
+                        return "";
+                    }
                     return findNearestWord(node);
                 }
                 node = node.getMiddleChild();
@@ -258,24 +252,30 @@ public class TernarySearchTree implements Resetable {
         Node right;
         Node left;
         Node center;
-        Node node = n;
-//        while (node != null) {
-//            if (node.isWordEnd()) {
-//                suffix.append(node.getMyChar());
-//                node = null;
-//                continue;
-//            }
-//            right = node.getRightChild();
-//            left = node.getLeftChild();
-//            center = node.getMiddleChild();
-//            if (right == null || left == null || center == null) {
-//                node = oneIsNull(center, left, node, right, suffix);
-//            } else {
-//                node = noneAreNull(right, left, center, node, suffix);
-//            }
-//        }
-        if (suffix.toString().equals("")) {
-            node = n;
+        Node node = n.getMiddleChild();
+        while (node != null) {
+            if (node.isWordEnd()) {
+                suffix.append(node.getMyChar());
+                node = null;
+                continue;
+            }
+            suffix.append(node.getMyChar());
+            right = node.getRightChild();
+            left = node.getLeftChild();
+            center = node.getMiddleChild();
+            if (right == null || left == null || center == null) {
+                node = oneIsNull(center, left, node, right, suffix);
+            } else {
+                node = noneAreNull(right, left, center, node, suffix);
+            }
+            if (node != center) {
+                suffix.setCharAt(suffix.length() - 1, node.getMyChar());
+                suffix.setLength(suffix.length()-1);
+            }
+                System.out.println(suffix.length());
+        }
+        if (suffix.length() == 0) {
+            node = n.getMiddleChild();
             while (node != null) {
                 if (node.isWordEnd()) {
                     suffix.append(node.getMyChar());
@@ -287,7 +287,8 @@ public class TernarySearchTree implements Resetable {
 
             }
         }
-        return suffix.substring(1);
+        System.out.println("-" + suffix.length());
+        return suffix.toString();
     }
 
     @Override
