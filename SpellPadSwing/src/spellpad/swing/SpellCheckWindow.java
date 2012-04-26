@@ -3,6 +3,7 @@ package spellpad.swing;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.UIManager;
+import spellpad.eventhandlers.textmodifying.dictionary.DictionaryController;
 
 /**
  *
@@ -13,16 +14,19 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     /**
      * Creates new form SpellCheckWindow
      */
-    public SpellCheckWindow(String concern, List<String> possibleFixes) {
+
+    public SpellCheckWindow(DictionaryController master, String concern, List<String> possibleFixes) {
         initComponents();
-        jTextPane1.setText(concern);
+        misspelling.setText(concern);
         DefaultListModel<String> model = new DefaultListModel<>();
         int position = 0;
-        for(String s : possibleFixes){
+        for (String s : possibleFixes) {
             model.add(position++, s);
         }
-        jList1.setModel(model);
+        suggestions.setModel(model);
+        this.master = master;
     }
+    DictionaryController master;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,17 +39,17 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        suggestions = new javax.swing.JList();
         ignoreOnce = new javax.swing.JButton();
         ignoreAll = new javax.swing.JButton();
         addtoDictionary = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        notInDictionary = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         change = new javax.swing.JButton();
         changeAll = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        misspelling = new javax.swing.JTextPane();
 
         jLabel2.setText("jLabel2");
 
@@ -54,12 +58,12 @@ public class SpellCheckWindow extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setResizable(false);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        suggestions.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(suggestions);
 
         ignoreOnce.setText("Ignore Once");
         ignoreOnce.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +86,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Not in Dictionary:");
+        notInDictionary.setText("Not in Dictionary:");
 
         jLabel3.setText("Suggestions:");
 
@@ -107,7 +111,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane3.setViewportView(jTextPane1);
+        jScrollPane3.setViewportView(misspelling);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -116,7 +120,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addComponent(notInDictionary)
                     .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -137,7 +141,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jLabel1)
+                .addComponent(notInDictionary)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -167,7 +171,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ignoreOnceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreOnceActionPerformed
-        // TODO add your handling code here:
+        master.ignoreWord(misspelling.getText());
     }//GEN-LAST:event_ignoreOnceActionPerformed
 
     private void ignoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreAllActionPerformed
@@ -229,7 +233,6 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
             public void run() {
                 //new SpellCheckWindow().setVisible(true);
-
             }
         });
     }
@@ -240,12 +243,12 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     private javax.swing.JButton changeAll;
     private javax.swing.JButton ignoreAll;
     private javax.swing.JButton ignoreOnce;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane misspelling;
+    private javax.swing.JLabel notInDictionary;
+    private javax.swing.JList suggestions;
     // End of variables declaration//GEN-END:variables
 }

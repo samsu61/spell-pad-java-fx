@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
@@ -17,6 +15,7 @@ import spellpad.dictionary.DictionaryLoader;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
 import spellpad.eventhandlers.SpellCheckChoiceActionListener;
+import spellpad.eventhandlers.SpellcheckActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
 import spellpad.eventhandlers.textmodifying.*;
 import spellpad.swing.autocomplete.WordCountCache;
@@ -38,16 +37,9 @@ public class SpellPadSwing {
         new Thread(loader).start();
         SpellPadSwing spellpad = new SpellPadSwing();
         spellpad.init();
-        List<String> test = new LinkedList<>();
-        test.add("calc");
-        test.add("palp");
-        test.add("capable");
-        SpellCheckWindow spellCheck = new SpellCheckWindow("calp",test );
-        spellCheck.setLocationRelativeTo(window);
-        spellCheck.setVisible(true);
         while(!loader.isExecutionComplete()){
             System.out.println("sleeping.");
-            Thread.sleep(125);
+            Thread.sleep(175);
         }
         wordCache.setDictionary(loader.getTree());
     }
@@ -88,17 +80,20 @@ public class SpellPadSwing {
         JButton underlineButton = new JButton("U");
         JButton undoButton = new JButton("Undo");
         JButton redoButton = new JButton("Redo");
+        JButton spellCheck = new JButton("Spellcheck");
         boldButton.addActionListener(new BoldActionListener(editPane));
         italicButton.addActionListener(new ItalicsActionListener(editPane));
         underlineButton.addActionListener(new UnderlineActionListener(editPane));
         undoButton.addActionListener(new UndoActionListener(manager));
         redoButton.addActionListener(new RedoActionListener(manager));
+        spellCheck.addActionListener(new SpellcheckActionListener(editPane, wordCache));
 
         toolBar.add(boldButton);
         toolBar.add(italicButton);
         toolBar.add(underlineButton);
         toolBar.add(undoButton);
         toolBar.add(redoButton);
+        toolBar.add(spellCheck);
         return toolBar;
     }
 
@@ -172,6 +167,7 @@ public class SpellPadSwing {
         document.setParser(new ParserDelegator());
         editPane.setDocument(document);
         editPane.setContentType(CONTENT_TYPE);
+        
         return editPane;
     }
 
