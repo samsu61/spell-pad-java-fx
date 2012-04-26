@@ -49,6 +49,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
         jLabel2.setText("jLabel2");
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Spell Check");
         setAlwaysOnTop(true);
         setResizable(false);

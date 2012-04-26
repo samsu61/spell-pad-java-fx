@@ -30,6 +30,7 @@ public class SpellPadSwing {
     public static final int WINDOW_HEIGHT = 600;
     public static final String CONTENT_TYPE = "text/html";
     public static WordCountCache wordCache;
+    public static JFrame window;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
@@ -42,6 +43,7 @@ public class SpellPadSwing {
         test.add("palp");
         test.add("capable");
         SpellCheckWindow spellCheck = new SpellCheckWindow("calp",test );
+        spellCheck.setLocationRelativeTo(window);
         spellCheck.setVisible(true);
         while(!loader.isExecutionComplete()){
             System.out.println("sleeping.");
@@ -54,7 +56,7 @@ public class SpellPadSwing {
         UndoManager undoManager = new UndoManager();
         undoManager.setLimit(500);
         setLookAndFeel();
-        JFrame window = initFrame();
+        window = initFrame();
         SpellPadEditorPane editPane = initTextPane();
         wordCache = new WordCountCache(editPane);
         JScrollPane textAreaScrollPane = addScrolling(editPane, window);
