@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
@@ -35,6 +37,12 @@ public class SpellPadSwing {
         new Thread(loader).start();
         SpellPadSwing spellpad = new SpellPadSwing();
         spellpad.init();
+        List<String> test = new LinkedList<>();
+        test.add("calc");
+        test.add("palp");
+        test.add("capable");
+        SpellCheckWindow spellCheck = new SpellCheckWindow("calp",test );
+        spellCheck.setVisible(true);
         while(!loader.isExecutionComplete()){
             System.out.println("sleeping.");
             Thread.sleep(125);
