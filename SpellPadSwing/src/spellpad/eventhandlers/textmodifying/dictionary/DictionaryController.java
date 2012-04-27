@@ -26,12 +26,15 @@ public class DictionaryController {
         textArea = checkOn;
         cache = dictionaryOwner;
         findMisspellings();
+    }
+    
+    public void spellCheckInvoked(){
         List<String> strings = new LinkedList<>();
         strings.add("fumble");
         strings.add("fumple");
         strings.add("frumpy");
         SpellCheckWindow spellWindow = new SpellCheckWindow(this, "fump", strings);
-        spellWindow.setLocationRelativeTo(checkOn.getParent());
+        spellWindow.setLocationRelativeTo(textArea.getParent());
         spellWindow.setVisible(true);
     }
 

@@ -28,6 +28,7 @@ public class SpellcheckActionListener implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         DictionaryController controller = new DictionaryController(textArea, cache);
+        controller.spellCheckInvoked();
     }
     
 }
