@@ -7,7 +7,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spellpad.swing.autocomplete.TernarySearchTree;
-import spellpad.swing.autocomplete.WordCountCache;
 
 /**
  *

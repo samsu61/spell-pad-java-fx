@@ -1,6 +1,7 @@
 package spellpad.eventhandlers.textmodifying.dictionary;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextPane;
@@ -21,14 +22,21 @@ public class DictionaryController {
     private WordCountCache cache;
 
     public DictionaryController(JTextPane checkOn, WordCountCache dictionaryOwner) {
+        ignorance = new LinkedList<>();
         textArea = checkOn;
         cache = dictionaryOwner;
         findMisspellings();
-        
-        
+        List<String> strings = new LinkedList<>();
+        strings.add("fumble");
+        strings.add("fumple");
+        strings.add("frumpy");
+        SpellCheckWindow spellWindow = new SpellCheckWindow(this, "fump", strings);
+        spellWindow.setLocationRelativeTo(checkOn.getParent());
+        spellWindow.setVisible(true);
     }
 
     private void findMisspellings() {
+        misspellings = new LinkedList<>();
         try {
             String content = textArea.getDocument().getText(0, textArea.getDocument().getLength());
             for (int i = 0; i < content.length();) {
@@ -38,15 +46,19 @@ public class DictionaryController {
                 }
                 int wordEnd;
                 for (wordEnd = i; wordEnd < content.length();) {
-                   if(!Character.isLetter(content.charAt(i))){
-                       wordEnd++;
-                   } 
+                    if (Character.isLetter(content.charAt(wordEnd))) {
+                        wordEnd++;
+                    }else{
+                        break;
+                    }
                 }
                 String word = content.substring(i, wordEnd);
-                if(!cache.getDictionary().contains(word)){
+                if (word.length() > 1 && !cache.getDictionary().contains(word)) {
                     misspellings.add(new MisspellingEntry(i, word));
                 }
-                i = wordEnd +1;
+                i = wordEnd + 1;
+
+
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,6 +96,8 @@ public class DictionaryController {
             MisspellingEntry entry = misspellings.poll();
             textArea.getDocument().remove(entry.begins, entry.text.length());
             textArea.getDocument().insertString(entry.begins, replaceWith, null);
+
+
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -99,10 +113,16 @@ public class DictionaryController {
                     textArea.getDocument().remove(entry.begins, entry.text.length());
                     textArea.getDocument().insertString(entry.begins, replaceWith, null);
                     i--;
+
+
                 }
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void cancel(){
+        //do something here.......
     }
 }
