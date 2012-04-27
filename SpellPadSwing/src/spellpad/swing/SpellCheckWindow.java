@@ -191,7 +191,8 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_changeAllActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        master.cancel();
     }//GEN-LAST:event_cancelActionPerformed
 
     /**
