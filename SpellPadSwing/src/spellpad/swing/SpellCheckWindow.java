@@ -172,27 +172,30 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
     private void ignoreOnceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreOnceActionPerformed
         master.ignoreWord(misspelling.getText());
+        noLongerBusy();
     }//GEN-LAST:event_ignoreOnceActionPerformed
 
     private void ignoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreAllActionPerformed
-        // TODO add your handling code here:
+        noLongerBusy();
     }//GEN-LAST:event_ignoreAllActionPerformed
 
     private void addtoDictionaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addtoDictionaryActionPerformed
-        // TODO add your handling code here:
+        noLongerBusy();
     }//GEN-LAST:event_addtoDictionaryActionPerformed
 
     private void changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeActionPerformed
-        // TODO add your handling code here:
+        master.changeWord((String)suggestions.getSelectedValue());
+        noLongerBusy();
     }//GEN-LAST:event_changeActionPerformed
 
     private void changeAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAllActionPerformed
-        // TODO add your handling code here:
+        noLongerBusy();
     }//GEN-LAST:event_changeAllActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         this.dispose();
         master.cancel();
+        noLongerBusy();
     }//GEN-LAST:event_cancelActionPerformed
 
     /**
@@ -233,7 +236,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                //new SpellCheckWindow().setVisible(true);
+                
             }
         });
     }
@@ -252,4 +255,13 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     private javax.swing.JLabel notInDictionary;
     private javax.swing.JList suggestions;
     // End of variables declaration//GEN-END:variables
+    private boolean busy = true;
+
+    public boolean isBusy() {
+        return busy;
+    }
+    
+    private void noLongerBusy(){
+        busy = false;
+    }
 }

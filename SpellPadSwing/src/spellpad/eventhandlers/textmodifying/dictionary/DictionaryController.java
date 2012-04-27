@@ -27,15 +27,25 @@ public class DictionaryController {
         cache = dictionaryOwner;
         findMisspellings();
     }
-    
-    public void spellCheckInvoked(){
-        List<String> strings = new LinkedList<>();
-        strings.add("fumble");
-        strings.add("fumple");
-        strings.add("frumpy");
-        SpellCheckWindow spellWindow = new SpellCheckWindow(this, "fump", strings);
-        spellWindow.setLocationRelativeTo(textArea.getParent());
-        spellWindow.setVisible(true);
+
+    public void spellCheckInvoked() {
+        for (int i = 0; i < misspellings.size(); i++) {
+            List<String> strings = new LinkedList<>();
+            strings.add("fumble");
+            strings.add("fumple");
+            strings.add("frumpy");
+            SpellCheckWindow spellWindow = new SpellCheckWindow(this, misspellings.get(i).text, strings);
+            spellWindow.setLocationRelativeTo(textArea.getParent());
+            spellWindow.setVisible(true);
+            while(spellWindow.isBusy()){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            };
+            spellWindow.dispose();
+        }
     }
 
     private void findMisspellings() {
@@ -51,7 +61,7 @@ public class DictionaryController {
                 for (wordEnd = i; wordEnd < content.length();) {
                     if (Character.isLetter(content.charAt(wordEnd))) {
                         wordEnd++;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -124,8 +134,8 @@ public class DictionaryController {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void cancel(){
+
+    public void cancel() {
         //do something here.......
     }
 }
