@@ -2,8 +2,8 @@ package spellpad.swing;
 
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.UIManager;
 import spellpad.eventhandlers.textmodifying.dictionary.DictionaryController;
+import spellpad.eventhandlers.textmodifying.dictionary.MisspellingEntry;
 
 /**
  *
@@ -14,19 +14,36 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     /**
      * Creates new form SpellCheckWindow
      */
-
-    public SpellCheckWindow(DictionaryController master, String concern, List<String> possibleFixes) {
+    public SpellCheckWindow(final DictionaryController master) {
         initComponents();
-        misspelling.setText(concern);
-        DefaultListModel<String> model = new DefaultListModel<>();
-        int position = 0;
-        for (String s : possibleFixes) {
-            model.add(position++, s);
-        }
-        suggestions.setModel(model);
+        // misspelling.setText(concern);
+        //DefaultListModel<String> model = new DefaultListModel<>();
+        //int position = 0;
+        //for (String s : possibleFixes) {
+        //  model.add(position++, s);
+        //}
+        //suggestions.setModel(model);
         this.master = master;
+        
     }
     DictionaryController master;
+
+    public void checkSpelling() {
+        MisspellingEntry entry = master.getNext();
+        if (entry == null) {
+            cancelActionPerformed(null);
+        } else {
+            misspelling.setText(entry.getText());
+            List<String> suggested = master.getSuggestions(entry);
+            DefaultListModel model = new DefaultListModel();
+            int i = 0;
+            while (i < suggested.size()) {
+                model.add(i, suggested.get(i));
+                i++;
+            }
+            suggestions.setModel(model);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,6 +74,11 @@ public class SpellCheckWindow extends javax.swing.JFrame {
         setTitle("Spell Check");
         setAlwaysOnTop(true);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                WindowCloseHandler(evt);
+            }
+        });
 
         suggestions.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -172,73 +194,35 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
     private void ignoreOnceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreOnceActionPerformed
         master.ignoreWord(misspelling.getText());
-        noLongerBusy();
+
     }//GEN-LAST:event_ignoreOnceActionPerformed
 
     private void ignoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreAllActionPerformed
-        noLongerBusy();
     }//GEN-LAST:event_ignoreAllActionPerformed
 
     private void addtoDictionaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addtoDictionaryActionPerformed
-        noLongerBusy();
     }//GEN-LAST:event_addtoDictionaryActionPerformed
 
     private void changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeActionPerformed
-        master.changeWord((String)suggestions.getSelectedValue());
-        noLongerBusy();
+        master.changeWord((String) suggestions.getSelectedValue());
+
     }//GEN-LAST:event_changeActionPerformed
 
     private void changeAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAllActionPerformed
-        noLongerBusy();
     }//GEN-LAST:event_changeAllActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         this.dispose();
         master.cancel();
-        noLongerBusy();
+
     }//GEN-LAST:event_cancelActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-         * Set the system default look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SpellCheckWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SpellCheckWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SpellCheckWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SpellCheckWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void WindowCloseHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_WindowCloseHandler
+        master.cancel();
+    }//GEN-LAST:event_WindowCloseHandler
 
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                
-            }
-        });
+    private MisspellingEntry getNextEntry() {
+        return master.getNext();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addtoDictionary;
@@ -255,13 +239,4 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     private javax.swing.JLabel notInDictionary;
     private javax.swing.JList suggestions;
     // End of variables declaration//GEN-END:variables
-    private boolean busy = true;
-
-    public boolean isBusy() {
-        return busy;
-    }
-    
-    private void noLongerBusy(){
-        busy = false;
-    }
 }
