@@ -14,5 +14,9 @@ public class MisspellingEntry {
         text = word;
     }
     
+    public String getText(){
+        return text;
+    }
+    
     
 }

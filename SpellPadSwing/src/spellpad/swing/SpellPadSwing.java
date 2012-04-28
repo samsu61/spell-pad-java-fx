@@ -86,7 +86,7 @@ public class SpellPadSwing {
         underlineButton.addActionListener(new UnderlineActionListener(editPane));
         undoButton.addActionListener(new UndoActionListener(manager));
         redoButton.addActionListener(new RedoActionListener(manager));
-        spellCheck.addActionListener(new SpellcheckActionListener(editPane, wordCache));
+        spellCheck.addActionListener(new SpellcheckActionListener(editPane, wordCache, window));
 
         toolBar.add(boldButton);
         toolBar.add(italicButton);

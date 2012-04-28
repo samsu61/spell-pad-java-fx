@@ -1,9 +1,13 @@
 package spellpad.eventhandlers.textmodifying.dictionary;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import spellpad.swing.SpellCheckWindow;
@@ -19,33 +23,36 @@ public class DictionaryController {
     private LinkedList<String> ignorance;
     private SpellCheckWindow checkWindow;
     private JTextPane textArea;
+    private JFrame mainWindow;
     private WordCountCache cache;
 
-    public DictionaryController(JTextPane checkOn, WordCountCache dictionaryOwner) {
+    public DictionaryController(JTextPane checkOn, WordCountCache dictionaryOwner, JFrame dispatcher) {
         ignorance = new LinkedList<>();
         textArea = checkOn;
         cache = dictionaryOwner;
+        mainWindow = dispatcher;
         findMisspellings();
     }
 
+    public MisspellingEntry getNext() {
+        return misspellings.peek();
+    }
+
+    public List<String> getSuggestions(MisspellingEntry entry) {
+        List<String> strings = new LinkedList<>();
+        strings.add("fumble");
+        strings.add("fumple");
+        strings.add("frumpy");
+        return strings;
+    }
+
     public void spellCheckInvoked() {
-        for (int i = 0; i < misspellings.size(); i++) {
-            List<String> strings = new LinkedList<>();
-            strings.add("fumble");
-            strings.add("fumple");
-            strings.add("frumpy");
-            SpellCheckWindow spellWindow = new SpellCheckWindow(this, misspellings.get(i).text, strings);
-            spellWindow.setLocationRelativeTo(textArea.getParent());
-            spellWindow.setVisible(true);
-            while(spellWindow.isBusy()){
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            };
-            spellWindow.dispose();
-        }
+        mainWindow.setEnabled(false);
+        checkWindow = new SpellCheckWindow(this);
+        
+        checkWindow.checkSpelling();
+        checkWindow.setLocationRelativeTo(textArea.getParent());
+        checkWindow.setVisible(true);
     }
 
     private void findMisspellings() {
@@ -136,6 +143,6 @@ public class DictionaryController {
     }
 
     public void cancel() {
-        //do something here.......
+        mainWindow.setEnabled(true);
     }
 }
