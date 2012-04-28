@@ -1,8 +1,5 @@
 package spellpad.eventhandlers.textmodifying.dictionary;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +46,7 @@ public class DictionaryController {
     public void spellCheckInvoked() {
         mainWindow.setEnabled(false);
         checkWindow = new SpellCheckWindow(this);
-        
+
         checkWindow.checkSpelling();
         checkWindow.setLocationRelativeTo(textArea.getParent());
         checkWindow.setVisible(true);
@@ -105,7 +102,7 @@ public class DictionaryController {
         while (i > 0) {
             if (misspellings.get(--i).text.equals(ignoredCompletely)) {
                 misspellings.remove(i);
-                i--;
+                //i--;
             }
         }
 
@@ -121,6 +118,7 @@ public class DictionaryController {
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        findMisspellings();
     }
 
     public void changeAllWord(String replaceWith) {
@@ -132,7 +130,7 @@ public class DictionaryController {
                     MisspellingEntry entry = misspellings.remove(i);
                     textArea.getDocument().remove(entry.begins, entry.text.length());
                     textArea.getDocument().insertString(entry.begins, replaceWith, null);
-                    i--;
+                    //i--;
 
 
                 }
@@ -140,6 +138,7 @@ public class DictionaryController {
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        findMisspellings();
     }
 
     public void cancel() {

@@ -24,7 +24,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
         //}
         //suggestions.setModel(model);
         this.master = master;
-        
+
     }
     DictionaryController master;
 
@@ -195,20 +195,29 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     private void ignoreOnceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreOnceActionPerformed
         master.ignoreWord(misspelling.getText());
 
+        checkSpelling();
     }//GEN-LAST:event_ignoreOnceActionPerformed
 
     private void ignoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignoreAllActionPerformed
+        master.ingoreAllInstancesOfWord(misspelling.getText());
+        checkSpelling();
     }//GEN-LAST:event_ignoreAllActionPerformed
 
     private void addtoDictionaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addtoDictionaryActionPerformed
+        master.addWordToDictionary(misspelling.getText());
+        checkSpelling();
+
     }//GEN-LAST:event_addtoDictionaryActionPerformed
 
     private void changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeActionPerformed
         master.changeWord((String) suggestions.getSelectedValue());
+        checkSpelling();
 
     }//GEN-LAST:event_changeActionPerformed
 
     private void changeAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAllActionPerformed
+        master.changeAllWord((String) suggestions.getSelectedValue());
+        checkSpelling();
     }//GEN-LAST:event_changeAllActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -220,10 +229,6 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     private void WindowCloseHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_WindowCloseHandler
         master.cancel();
     }//GEN-LAST:event_WindowCloseHandler
-
-    private MisspellingEntry getNextEntry() {
-        return master.getNext();
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addtoDictionary;
     private javax.swing.JButton cancel;
