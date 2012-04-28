@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import java.awt.event.ActionEvent;
@@ -16,7 +12,7 @@ public class SpellCheckChoiceActionListener implements ActionListener {
 
     private JMenuItem item;
     private boolean useDictionary;
-    
+
     public SpellCheckChoiceActionListener(JMenuItem toModify) {
         item = toModify;
         useDictionary = true;
@@ -24,9 +20,9 @@ public class SpellCheckChoiceActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(useDictionary){
+        if (useDictionary) {
             item.setText("Dictionary");
-        }else{
+        } else {
             item.setText("Document");
         }
         useDictionary = !useDictionary;

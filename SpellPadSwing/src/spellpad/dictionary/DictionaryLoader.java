@@ -20,11 +20,11 @@ public class DictionaryLoader implements Runnable {
 
     @Override
     public void run() {
-        try(Scanner input = new Scanner(new FileInputStream(dictionary))){
-            while(input.hasNext()){
+        try (Scanner input = new Scanner(new FileInputStream(dictionary))) {
+            while (input.hasNext()) {
                 tree.add(input.nextLine().toLowerCase());
             }
-        }catch(IOException ex){
+        } catch (IOException ex) {
             Logger.getLogger(DictionaryLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
         executionComplete = true;
@@ -37,6 +37,4 @@ public class DictionaryLoader implements Runnable {
     public TernarySearchTree getTree() {
         return tree;
     }
-    
-    
 }

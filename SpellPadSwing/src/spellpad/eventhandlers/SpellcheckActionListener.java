@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import java.awt.event.ActionEvent;
@@ -15,24 +11,21 @@ import spellpad.swing.autocomplete.WordCountCache;
  *
  * @author Jesse Allen
  */
-public class SpellcheckActionListener implements ActionListener{
+public class SpellcheckActionListener implements ActionListener {
 
     JFrame mainWindow;
     JTextPane textArea;
     WordCountCache cache;
-    
-    
-    public SpellcheckActionListener(JTextPane textPane, WordCountCache dictionaryOwner, JFrame dispatcher){
+
+    public SpellcheckActionListener(JTextPane textPane, WordCountCache dictionaryOwner, JFrame dispatcher) {
         textArea = textPane;
         cache = dictionaryOwner;
         mainWindow = dispatcher;
     }
-    
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         DictionaryController controller = new DictionaryController(textArea, cache, mainWindow);
         controller.spellCheckInvoked();
     }
-    
 }

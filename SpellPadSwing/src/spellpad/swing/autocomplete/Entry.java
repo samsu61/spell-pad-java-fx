@@ -70,6 +70,4 @@ public class Entry implements Comparable<Entry> {
         hash = 79 * hash + this.count;
         return hash;
     }
-    
-    
 }

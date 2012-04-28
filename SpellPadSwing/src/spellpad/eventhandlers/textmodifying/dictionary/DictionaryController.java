@@ -131,8 +131,6 @@ public class DictionaryController {
                     textArea.getDocument().remove(entry.begins, entry.text.length());
                     textArea.getDocument().insertString(entry.begins, replaceWith, null);
                     //i--;
-
-
                 }
             }
         } catch (BadLocationException ex) {
@@ -143,5 +141,6 @@ public class DictionaryController {
 
     public void cancel() {
         mainWindow.setEnabled(true);
+        mainWindow.requestFocus();
     }
 }

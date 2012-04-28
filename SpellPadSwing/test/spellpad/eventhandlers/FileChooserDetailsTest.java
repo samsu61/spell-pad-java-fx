@@ -1,20 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import java.io.File;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import static org.junit.Assert.assertEquals;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author Jesse Allen
  */
 public class FileChooserDetailsTest {
-    
+
     public FileChooserDetailsTest() {
     }
 
@@ -25,11 +21,11 @@ public class FileChooserDetailsTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
