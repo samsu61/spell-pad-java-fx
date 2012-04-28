@@ -204,7 +204,7 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_ignoreAllActionPerformed
 
     private void addtoDictionaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addtoDictionaryActionPerformed
-        master.addWordToDictionary(misspelling.getText());
+        master.addWordToDictionary(misspelling.getText().toLowerCase());
         checkSpelling();
 
     }//GEN-LAST:event_addtoDictionaryActionPerformed

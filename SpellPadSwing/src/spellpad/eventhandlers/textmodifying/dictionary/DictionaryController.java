@@ -1,10 +1,11 @@
 package spellpad.eventhandlers.textmodifying.dictionary;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import spellpad.swing.SpellCheckWindow;
@@ -45,17 +46,21 @@ public class DictionaryController {
 
     public void spellCheckInvoked() {
         mainWindow.setEnabled(false);
-        checkWindow = new SpellCheckWindow(this);
-
-        checkWindow.checkSpelling();
-        checkWindow.setLocationRelativeTo(textArea.getParent());
-        checkWindow.setVisible(true);
+        if (!misspellings.isEmpty()) {
+            checkWindow = new SpellCheckWindow(this);
+            checkWindow.checkSpelling();
+            checkWindow.setLocationRelativeTo(textArea.getParent());
+            checkWindow.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No words are misspelled.", "Spell Check", JOptionPane.INFORMATION_MESSAGE);
+            cancel();
+        }
     }
 
     private void findMisspellings() {
         misspellings = new LinkedList<>();
         try {
-            String content = textArea.getDocument().getText(0, textArea.getDocument().getLength());
+            String content = textArea.getDocument().getText(0, textArea.getDocument().getLength()).toLowerCase();
             for (int i = 0; i < content.length();) {
                 if (!Character.isLetter(content.charAt(i))) {
                     i++;
@@ -82,11 +87,10 @@ public class DictionaryController {
         }
     }
 
-    public void addWordToDictionary(String word) {
-        //start thread to modify dictionary
-        //perhaps not start thread, run in this thred, block until done.
-        //reload dictionary
-        //remove all instances of misspelling
+    public void addWordToDictionary(final String word) {
+        cache.getDictionary().add(word);
+        misspellings.poll();
+        new Thread(new SaveWorker(word)).start();
     }
 
     public void ignoreWord(String ignored) {
@@ -105,7 +109,6 @@ public class DictionaryController {
                 //i--;
             }
         }
-
     }
 
     public void changeWord(String replaceWith) {
@@ -142,5 +145,33 @@ public class DictionaryController {
     public void cancel() {
         mainWindow.setEnabled(true);
         mainWindow.requestFocus();
+    }
+
+    static class SaveWorker implements Runnable {
+
+        private final String word;
+
+        public SaveWorker(String word) {
+            this.word = word;
+        }
+
+        @Override
+        public void run() {
+            try (Scanner scanner = new Scanner(new FileInputStream(new File("dictionary.dat")))) {
+                ArrayList<String> strings = new ArrayList<>();
+                while (scanner.hasNext()) {
+                    strings.add(scanner.nextLine());
+                }
+                strings.add(word);
+                Collections.sort(strings);
+                try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("dictionary.dat")))) {
+                    for (String s : strings) {
+                        pw.println(s);
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
