@@ -33,7 +33,6 @@ public class DocumentChangedActionListener implements DocumentListener {
 
     @Override
     public void removeUpdate(DocumentEvent de) {
-        
     }
 
     @Override

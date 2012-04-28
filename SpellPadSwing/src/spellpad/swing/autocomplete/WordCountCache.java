@@ -24,14 +24,11 @@ public class WordCountCache implements Runnable, Resetable {
 
     public void setDictionary(TernarySearchTree dictionary) {
         this.dictionary = dictionary;
-        dictionary.balance();
     }
 
     public TernarySearchTree getDictionary() {
         return dictionary;
     }
-    
-    
 
     public WordCountCache(JTextPane textPane) {
         this.textPane = textPane;

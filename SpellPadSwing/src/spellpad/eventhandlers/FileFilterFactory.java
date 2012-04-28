@@ -27,7 +27,7 @@ final class FileFilterFactory {
         FileChooserDetails thisChoosersDetails =
                 new FileChooserDetails(
                 fileChooser.getSelectedFile(),
-                (FileNameExtensionFilter) fileChooser.getFileFilter());        
+                (FileNameExtensionFilter) fileChooser.getFileFilter());
         return thisChoosersDetails;
     }
 

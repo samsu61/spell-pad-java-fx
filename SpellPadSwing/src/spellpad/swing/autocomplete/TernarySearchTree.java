@@ -10,7 +10,7 @@ public class TernarySearchTree implements Resetable {
 
     private Node root = null;
 
-    public void balance() {
+    private void balance() {
         balance(root);
     }
 
@@ -236,7 +236,7 @@ public class TernarySearchTree implements Resetable {
                 node = node.getRightChild();
             } else {
                 if (++position == s.length()) {
-                    if(node.isWordEnd()){
+                    if (node.isWordEnd()) {
                         return "";
                     }
                     return findNearestWord(node);
@@ -270,9 +270,9 @@ public class TernarySearchTree implements Resetable {
             }
             if (node != center) {
                 suffix.setCharAt(suffix.length() - 1, node.getMyChar());
-                suffix.setLength(suffix.length()-1);
+                suffix.setLength(suffix.length() - 1);
             }
-                System.out.println(suffix.length());
+            System.out.println(suffix.length());
         }
         if (suffix.length() == 0) {
             node = n.getMiddleChild();

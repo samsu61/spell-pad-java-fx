@@ -6,8 +6,8 @@ package spellpad.swing.autocomplete;
 
 import java.util.ArrayList;
 import java.util.Random;
+import static org.junit.Assert.assertTrue;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -54,7 +54,7 @@ public class TernarySearchTreeTest {
     private ArrayList<String> randomStrings() {
         ArrayList<String> strings = new ArrayList<String>();
         Random gen = new Random();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             StringBuilder s = new StringBuilder();
             int thisLength = gen.nextInt(15) + 4;
             for (int j = 0; j < thisLength; j++) {
@@ -98,8 +98,10 @@ public class TernarySearchTreeTest {
             if (length == 4) {
                 continue;
             }
-            int substringTo = gen.nextInt(length-1);
-            if(substringTo == 0) continue;
+            int substringTo = gen.nextInt(length - 1);
+            if (substringTo == 0) {
+                continue;
+            }
             String searchFor = s.substring(0, substringTo);
             String suffix = instance.search(searchFor);
             assertTrue(strings.contains(searchFor + suffix));
@@ -114,12 +116,12 @@ public class TernarySearchTreeTest {
     public void testReset() {
         System.out.println("reset");
         TernarySearchTree instance = new TernarySearchTree();
-         ArrayList<String> strings = randomStrings();
+        ArrayList<String> strings = randomStrings();
         for (String s : strings) {
             instance.add(s);
         }
         instance.reset();
-        for (String s : strings){
+        for (String s : strings) {
             assertTrue(!instance.contains(s));
         }
     }

@@ -1,21 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.eventhandlers;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.*;
 import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author Jesse Allen
  */
 public class ClipboardHandlerTest {
-    
+
     public ClipboardHandlerTest() {
     }
 
@@ -26,11 +23,11 @@ public class ClipboardHandlerTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -59,7 +56,7 @@ public class ClipboardHandlerTest {
         String selected = "Content Selected.";
         ClipboardHandler instance = new ClipboardHandler();
         instance.setClipboardContents(selected);
-        assert(Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).equals(selected));
+        assert (Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).equals(selected));
     }
 
     /**

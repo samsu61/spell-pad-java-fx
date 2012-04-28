@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.swing.autocomplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JTextPane;
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.*;
 
 /**
@@ -16,7 +12,7 @@ import org.junit.*;
  * @author Jesse Allen
  */
 public class WordCountCacheTest {
-    
+
     public WordCountCacheTest() {
     }
 
@@ -28,18 +24,18 @@ public class WordCountCacheTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
         textPane.setText("them them then their their their cheese their them");
     }
-    
+
     @After
     public void tearDown() {
         textPane.setText("");
     }
     static JTextPane textPane;
-    
+
     /**
      * Test of getWordCount method, of class WordCountCache.
      */
@@ -55,10 +51,10 @@ public class WordCountCacheTest {
         expResult.add(new Entry(1, "cheese"));
         Collections.sort(expResult);
         ArrayList result = instance.getWordCount();
-        for(int i = 0; i < result.size(); i++){
+        for (int i = 0; i < result.size(); i++) {
             assertEquals(expResult.get(i), result.get(i));
         }
-        
+
     }
 
     /**
@@ -81,8 +77,8 @@ public class WordCountCacheTest {
         expResult.add("them");
         TernarySearchTree result = instance.getAutocompleteTree();
         assertTrue(result.equals(expResult));
-        
-       
+
+
     }
 
     /**
@@ -99,9 +95,8 @@ public class WordCountCacheTest {
         TernarySearchTree resultB = new TernarySearchTree();
         assertEquals(expectedA, resultA);
         assertEquals(expectedB, resultB);
-        
-    }
 
+    }
 //    /**
 //     * Test of run method, of class WordCountCache.
 //     */

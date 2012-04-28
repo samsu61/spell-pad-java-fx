@@ -1,18 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spellpad.swing.autocomplete;
 
-import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.*;
 
 /**
  *
  * @author Jesse Allen
  */
 public class NodeTest {
-    
+
     public NodeTest() {
     }
 
@@ -23,11 +19,11 @@ public class NodeTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -50,7 +46,7 @@ public class NodeTest {
         instance.increasePopularity();
         instance.increasePopularity();
         assertEquals(10, instance.getPopularity());
-        
+
     }
 
     /**
@@ -113,7 +109,7 @@ public class NodeTest {
         Node instance = new Node('c', true);
         boolean result = instance.isWordEnd();
         assertTrue(result);
-        
+
     }
 
     /**
@@ -139,5 +135,4 @@ public class NodeTest {
         int result = instance.getPopularity();
         assertEquals(expResult, result);
     }
-
 }

@@ -37,7 +37,7 @@ public class SpellPadSwing {
         new Thread(loader).start();
         SpellPadSwing spellpad = new SpellPadSwing();
         spellpad.init();
-        while(!loader.isExecutionComplete()){
+        while (!loader.isExecutionComplete()) {
             System.out.println("sleeping.");
             Thread.sleep(175);
         }
@@ -143,7 +143,7 @@ public class SpellPadSwing {
         edit.add(undo);
         edit.add(redo);
         menubar.add(edit);
-        
+
         JMenu settings = new JMenu("Settings");
         JMenuItem spellCheckChoice = new JMenuItem("Dictionary");
         spellCheckChoice.addActionListener(new SpellCheckChoiceActionListener(spellCheckChoice));
@@ -167,7 +167,7 @@ public class SpellPadSwing {
         document.setParser(new ParserDelegator());
         editPane.setDocument(document);
         editPane.setContentType(CONTENT_TYPE);
-        
+
         return editPane;
     }
 
@@ -190,6 +190,4 @@ public class SpellPadSwing {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return window;
     }
-
-    
 }

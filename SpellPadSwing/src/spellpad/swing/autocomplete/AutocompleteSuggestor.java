@@ -51,9 +51,9 @@ public class AutocompleteSuggestor implements Runnable {
             System.err.println("No event was updated to this suggestor");
             return;
         }
-        if(textArea.getSelectedText() == null){
+        if (textArea.getSelectedText() == null) {
             mode = Mode.INSERT;
-        }else{
+        } else {
             return;
         }
         //grab local cache of event
@@ -62,8 +62,8 @@ public class AutocompleteSuggestor implements Runnable {
             return;
         }
         int position = event.getOffset();
-        
-        
+
+
         String content = getContent();
         int wordStart = getWordStart(position, content);
 
@@ -75,7 +75,7 @@ public class AutocompleteSuggestor implements Runnable {
         String prefix = content.substring(wordStart + 1, position + 1).toLowerCase();
         //String suffix = countCache.getAutocompleteTree().search(prefix);
         String suffix = "";
-        if(suffix.equals("")){
+        if (suffix.equals("")) {
             suffix = countCache.getDictionary().search(prefix);
         }
         if (!suffix.equals("")) {
@@ -110,7 +110,7 @@ public class AutocompleteSuggestor implements Runnable {
 
     private int getWordStart(int position, String content) {
         int wordStart;
-        for (wordStart = position-1; wordStart >= 0; wordStart--) {
+        for (wordStart = position - 1; wordStart >= 0; wordStart--) {
             if (!Character.isLetter(content.charAt(wordStart))) {
                 break;
             }
