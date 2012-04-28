@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import spellpad.swing.SpellCheckWindow;
+import spellpad.swing.autocomplete.TernarySearchTree;
 import spellpad.swing.autocomplete.WordCountCache;
 
 /**
@@ -37,10 +38,43 @@ public class DictionaryController {
     }
 
     public List<String> getSuggestions(MisspellingEntry entry) {
-        List<String> strings = new LinkedList<>();
-        strings.add("fumble");
-        strings.add("fumple");
-        strings.add("frumpy");
+        List<String> strings = new ArrayList<>();
+        String word = entry.getText();
+        TernarySearchTree dictionary = cache.getDictionary();
+        String suffix = dictionary.search(word);
+        if(!suffix.isEmpty()){
+            strings.add(word + suffix);
+        }
+        for (int i = 0; i < word.length() - 1; i++) {
+            //switch letters exhaustively
+            for (int j = i + 1; j < word.length(); j++) {
+                StringBuilder newWord = new StringBuilder(word);
+                char first = newWord.charAt(i);
+                char second = newWord.charAt(j);
+                newWord.setCharAt(i, second);
+                newWord.setCharAt(j, first);
+                if (dictionary.contains(newWord.toString())) {
+                    strings.add(newWord.toString());
+                }
+                suffix = dictionary.search(newWord.toString());
+                if (!suffix.isEmpty()) {
+                    String completion = newWord + suffix;
+                    if (!completion.equals(word) && !strings.contains(completion)) {
+                        strings.add(completion);
+                    }
+                }
+            }
+            //try shortening the prefix
+            String suggestion = word.substring(0, word.length() - 1 - i);
+            suffix = dictionary.search(suggestion);
+            if (!suffix.isEmpty()) {
+                String completion = suggestion + suffix;
+                if (!completion.equals(word) && !strings.contains(completion)) {
+                    strings.add(completion);
+                }
+            }
+        }
+        Collections.sort(strings);
         return strings;
     }
 
