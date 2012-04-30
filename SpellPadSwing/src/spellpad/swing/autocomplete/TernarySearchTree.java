@@ -18,6 +18,25 @@ public class TernarySearchTree implements Resetable {
         rotate(amIBalanced);
     }
 
+    private Node navigateToAdd(Node n, String s, int position, int direction, Node old) {
+        //make new variable instead. assigning new values to input variables is bad form.
+        Node node = n;
+        if (node == null) {
+            node = new Node(s.charAt(position), false);
+            if (root == null) {
+                root = node;
+            } else if (direction > 0) {
+                old.setRightChild(node);
+            } else if (direction < 0) {
+                old.setLeftChild(node);
+            } else {
+                old.setMiddleChild(node);
+            }
+            node.setParent(old);
+        }
+        return node;
+    }
+
     private void rotate(Node unbalanced) {
         int balance = unbalanced.getBalance();
         if (balance < -1) {
@@ -96,24 +115,17 @@ public class TernarySearchTree implements Resetable {
         //balance();
     }
 
-    private void add(String s, int position, int direction, Node node, Node old) {
-        //make new variable instead. assigning new values to input variables is bad form.
-        if (node == null) {
-            node = new Node(s.charAt(position), false);
-            if (root == null) {
-                root = node;
-            } else if (direction > 0) {
-                old.setRightChild(node);
-            } else if (direction < 0) {
-                old.setLeftChild(node);
-            } else {
-                old.setMiddleChild(node);
-            }
-            node.setParent(old);
+    public void addFake(String fake, String correction) throws IllegalArgumentException {
+        if (fake == null || fake.isEmpty()) {
+            throw new IllegalArgumentException("String is null or empty");
         }
-        if (s.length() <= position) {
-            return;
-        }
+        addFake(fake, 0, 0, root, null, correction);
+
+    }
+
+    private void add(String s, int position, int direction, Node n, Node old) {
+        Node node = navigateToAdd(n, s, position, direction, old);
+
         node.increasePopularity();
         if (s.charAt(position) > node.getMyChar()) {
             add(s, position, 1, node.getRightChild(), node);
@@ -124,6 +136,22 @@ public class TernarySearchTree implements Resetable {
                 node.setWordEnd(true);
             } else {
                 add(s, position + 1, 0, node.getMiddleChild(), node);
+            }
+        }
+    }
+
+    private void addFake(String fake, int position, int direction, Node n, Node old, String correction) {
+        Node node = navigateToAdd(n, fake, position, direction, old);
+        if (fake.charAt(position) > node.getMyChar()) {
+            add(fake, position, 1, node.getRightChild(), node);
+        } else if (fake.charAt(position) < node.getMyChar()) {
+            add(fake, position, -1, node.getLeftChild(), node);
+        } else {
+            if (position + 1 == fake.length()) {
+                node.setWordEnd(false);
+                node.setFake(true);
+            } else {
+                add(fake, position + 1, 0, node.getMiddleChild(), node);
             }
         }
     }
@@ -149,7 +177,7 @@ public class TernarySearchTree implements Resetable {
         return node;
     }
 
-    private Node oneIsNull(Node center, Node left, Node node, Node right, StringBuilder suffix) {
+    private Node onePlusAreNull(Node center, Node left, Node node, Node right, StringBuilder suffix) {
         if (center == null && right == null && left == null) {
             node = null;
         } else if (center == null) {
@@ -264,7 +292,7 @@ public class TernarySearchTree implements Resetable {
             left = node.getLeftChild();
             center = node.getMiddleChild();
             if (right == null || left == null || center == null) {
-                node = oneIsNull(center, left, node, right, suffix);
+                node = onePlusAreNull(center, left, node, right, suffix);
             } else {
                 node = noneAreNull(right, left, center, node, suffix);
             }
@@ -325,7 +353,8 @@ class Node {
 
     private char myChar;
     private Node leftChild, middleChild, rightChild, parent;
-    private boolean wordEnd;
+    private boolean wordEnd = false, fake = false;
+    private String link;
     private int popularity;
     int height;
 
@@ -414,6 +443,22 @@ class Node {
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public boolean isFake() {
+        return fake;
+    }
+
+    public void setFake(boolean fake) {
+        this.fake = fake;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Override
