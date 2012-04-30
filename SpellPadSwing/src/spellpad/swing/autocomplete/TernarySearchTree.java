@@ -10,14 +10,6 @@ public class TernarySearchTree implements Resetable {
 
     private Node root = null;
 
-    private void balance() {
-        balance(root);
-    }
-
-    void balance(Node amIBalanced) {
-        rotate(amIBalanced);
-    }
-
     private Node navigateToAdd(Node n, String s, int position, int direction, Node old) {
         //make new variable instead. assigning new values to input variables is bad form.
         Node node = n;
@@ -35,73 +27,6 @@ public class TernarySearchTree implements Resetable {
             node.setParent(old);
         }
         return node;
-    }
-
-    private void rotate(Node unbalanced) {
-        int balance = unbalanced.getBalance();
-        if (balance < -1) {
-            rotateLeft(unbalanced);
-        } else if (balance > 1) {
-            rotateRight(unbalanced);
-        }
-        if (unbalanced.getMiddleChild() != null) {
-            balance(unbalanced.getMiddleChild());
-        }
-
-    }
-
-    private void rotateRight(Node unbalanced) {
-        int balance = unbalanced.getLeftChild().getBalance();
-        if (balance < 0) {
-            //rotateleft left child
-        }
-        Node child = unbalanced.getLeftChild();
-        Node children = child.getRightChild();
-        Node parent = unbalanced.getParent();
-        child.setParent(parent);
-        if (parent != null) {
-            if (parent.getRightChild() == unbalanced) {
-                parent.setRightChild(child);
-            } else {
-                parent.setLeftChild(child);
-            }
-        }
-        unbalanced.setLeftChild(children);
-        if (children != null) {
-            children.setParent(unbalanced);
-        }
-        child.setRightChild(unbalanced);
-        unbalanced.setParent(child);
-        if (root == unbalanced) {
-            root = child;
-        }
-    }
-
-    private void rotateLeft(Node unbalanced) {
-        int balance = unbalanced.getRightChild().getBalance();
-        if (balance > 0) {
-            rotateRight(unbalanced.getRightChild());
-        }
-        Node child = unbalanced.getRightChild();
-        Node children = child.getLeftChild();
-        Node parent = unbalanced.getParent();
-        child.setParent(parent);
-        if (parent != null) {
-            if (parent.getRightChild() == unbalanced) {
-                parent.setRightChild(child);
-            } else {
-                parent.setLeftChild(child);
-            }
-        }
-        unbalanced.setRightChild(children);
-        if (children != null) {
-            children.setParent(unbalanced);
-        }
-        child.setLeftChild(unbalanced);
-        unbalanced.setParent(child);
-        if (root == unbalanced) {
-            root = child;
-        }
     }
 
     public void add(String s) throws IllegalArgumentException {
@@ -140,18 +65,19 @@ public class TernarySearchTree implements Resetable {
         }
     }
 
-    private void addFake(String fake, int position, int direction, Node n, Node old, String correction) {
+    private void addFake(String fake, int position, int direction, Node n, Node old, final String correction) {
         Node node = navigateToAdd(n, fake, position, direction, old);
         if (fake.charAt(position) > node.getMyChar()) {
-            add(fake, position, 1, node.getRightChild(), node);
+            addFake(fake, position, 1, node.getRightChild(), node, correction);
         } else if (fake.charAt(position) < node.getMyChar()) {
-            add(fake, position, -1, node.getLeftChild(), node);
+            addFake(fake, position, -1, node.getLeftChild(), node, correction);
         } else {
             if (position + 1 == fake.length()) {
                 node.setWordEnd(false);
                 node.setFake(true);
+                node.setLink(correction);
             } else {
-                add(fake, position + 1, 0, node.getMiddleChild(), node);
+                addFake(fake, position + 1, 0, node.getMiddleChild(), node, correction);
             }
         }
     }
@@ -249,6 +175,31 @@ public class TernarySearchTree implements Resetable {
         return isInTree;
     }
 
+    public String getFakeWordPointer(String s) {
+        if (s == null || s.isEmpty()) {
+            throw new IllegalArgumentException("String is null or empty");
+        }
+        int position = 0;
+        Node node = root;
+        String isInTree = null;
+        while (node != null) {
+            int comparison = s.charAt(position) - node.getMyChar();
+            if (comparison < 0) {
+                node = node.getLeftChild();
+            } else if (comparison > 0) {
+                node = node.getRightChild();
+            } else if (++position == s.length()) {
+                if (node.isFake()) {
+                    isInTree = node.getLink();
+                }
+                node = null;
+            } else {
+                node = node.getMiddleChild();
+            }
+        }
+        return isInTree;
+    }
+
     public String search(String s) {
 
         if (s == null || s.isEmpty()) {
@@ -315,8 +266,82 @@ public class TernarySearchTree implements Resetable {
 
             }
         }
-        System.out.println("-" + suffix.length());
         return suffix.toString();
+    }
+
+    private void balance() {
+        balance(root);
+    }
+
+    void balance(Node amIBalanced) {
+        rotate(amIBalanced);
+    }
+
+    private void rotate(Node unbalanced) {
+        int balance = unbalanced.getBalance();
+        if (balance < -1) {
+            rotateLeft(unbalanced);
+        } else if (balance > 1) {
+            rotateRight(unbalanced);
+        }
+        if (unbalanced.getMiddleChild() != null) {
+            balance(unbalanced.getMiddleChild());
+        }
+
+    }
+
+    private void rotateRight(Node unbalanced) {
+        int balance = unbalanced.getLeftChild().getBalance();
+        if (balance < 0) {
+            //rotateleft left child
+        }
+        Node child = unbalanced.getLeftChild();
+        Node children = child.getRightChild();
+        Node parent = unbalanced.getParent();
+        child.setParent(parent);
+        if (parent != null) {
+            if (parent.getRightChild() == unbalanced) {
+                parent.setRightChild(child);
+            } else {
+                parent.setLeftChild(child);
+            }
+        }
+        unbalanced.setLeftChild(children);
+        if (children != null) {
+            children.setParent(unbalanced);
+        }
+        child.setRightChild(unbalanced);
+        unbalanced.setParent(child);
+        if (root == unbalanced) {
+            root = child;
+        }
+    }
+
+    private void rotateLeft(Node unbalanced) {
+        int balance = unbalanced.getRightChild().getBalance();
+        if (balance > 0) {
+            rotateRight(unbalanced.getRightChild());
+        }
+        Node child = unbalanced.getRightChild();
+        Node children = child.getLeftChild();
+        Node parent = unbalanced.getParent();
+        child.setParent(parent);
+        if (parent != null) {
+            if (parent.getRightChild() == unbalanced) {
+                parent.setRightChild(child);
+            } else {
+                parent.setLeftChild(child);
+            }
+        }
+        unbalanced.setRightChild(children);
+        if (children != null) {
+            children.setParent(unbalanced);
+        }
+        child.setLeftChild(unbalanced);
+        unbalanced.setParent(child);
+        if (root == unbalanced) {
+            root = child;
+        }
     }
 
     @Override

@@ -42,6 +42,10 @@ public class DictionaryController {
         String word = entry.getText();
         TernarySearchTree dictionary = cache.getDictionary();
         String suffix = dictionary.search(word);
+        String test = dictionary.getFakeWordPointer(word);
+        if(test != null){
+            strings.add(test);
+        }
         if (!suffix.isEmpty()) {
             strings.add(word + suffix);
         }
@@ -75,11 +79,6 @@ public class DictionaryController {
         }
     }
 
-    public void addfake(String fake, String correction) {
-        cache.getDictionary().addFake(fake, correction);
-        
-    }
-
     private void shortenedPrefix(String word, int i, TernarySearchTree dictionary, List<String> strings) {
         String suffix;
         //try shortening the prefix
@@ -96,6 +95,10 @@ public class DictionaryController {
         }
     }
 
+    public void addfake(String fake, String correction) {
+        cache.getDictionary().addFake(fake, correction);
+    }
+    
     public void spellCheckInvoked() {
         mainWindow.setEnabled(false);
         if (!misspellings.isEmpty()) {
