@@ -16,29 +16,32 @@ import spellpad.filetype.parsing.SpellpadParser;
  * @author Jesse
  */
 public class SaveEventActionListenerTest {
-    
+
     public SaveEventActionListenerTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
-    
+
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
-        if(output.exists()){
+        if (output.exists()) {
             output.delete();
         }
+
     }
-    
+
     @After
     public void tearDown() {
-       if(output.exists())      output.delete();
-           
+        if (output.exists()) {
+            output.delete();
+        }
+
     }
     File output = new File("C:/test.txt");
 
@@ -53,8 +56,9 @@ public class SaveEventActionListenerTest {
         SaveEventActionListener instance = new SaveEventActionListener(null);
         String s = "This is some sample text.";
         textArea.setText(s);
+        assertTrue(!output.exists());
         instance.actionPerformed(e);
-    //    assertTrue(!output.exists());
+        assertTrue(!output.exists());
     }
 
     /**
@@ -68,8 +72,10 @@ public class SaveEventActionListenerTest {
         SaveEventActionListener instance = new SaveEventActionListener(null);
         String s = "This is some sample text.";
         textArea.setText(s);
+        assertTrue(!output.exists());
         instance.actionPerformed(e);
-  //      assertTrue(!output.exists());
+        assertTrue(!output.exists());
+        //      assertTrue(!output.exists());
     }
 
     /**
@@ -83,8 +89,19 @@ public class SaveEventActionListenerTest {
         SaveEventActionListener instance = new SaveEventActionListener(textArea);
         String s = "This is some sample text.";
         textArea.setText(s);
+        assertTrue(!output.exists());
         instance.actionPerformed(e);
-//        assertTrue(!output.exists());
+        assertTrue(output.exists());
+        try (FileReader reader = new FileReader(output);) {
+            StringBuilder fileContents = new StringBuilder();
+            char[] fileCharacters = new char[(int) output.length()];
+            reader.read(fileCharacters);
+            fileContents.append(fileCharacters);
+            String preppedText = SpellpadParser.prepPlainText(fileContents.toString());
+            assertEquals(s, preppedText);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -101,9 +118,8 @@ public class SaveEventActionListenerTest {
         assertTrue(!output.exists());
         instance.actionPerformed(e);
         assertTrue(output.exists());
-        try {
+        try (FileReader reader = new FileReader(output)) {
             StringBuilder fileContents = new StringBuilder();
-            FileReader reader = new FileReader(output);
             char[] fileCharacters = new char[(int) output.length()];
             reader.read(fileCharacters);
             fileContents.append(fileCharacters);
@@ -112,6 +128,6 @@ public class SaveEventActionListenerTest {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+
     }
 }

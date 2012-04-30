@@ -27,13 +27,15 @@ public class SpellCheckWindow extends javax.swing.JFrame {
 
     }
     DictionaryController master;
+    String original;
 
     public void checkSpelling() {
         MisspellingEntry entry = master.getNext();
         if (entry == null) {
             cancelActionPerformed(null);
         } else {
-            misspelling.setText(entry.getText());
+            original = entry.getText();
+            misspelling.setText(original);
             List<String> suggested = master.getSuggestions(entry);
             DefaultListModel model = new DefaultListModel();
             int i = 0;
@@ -210,7 +212,13 @@ public class SpellCheckWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_addtoDictionaryActionPerformed
 
     private void changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeActionPerformed
-        master.changeWord((String) suggestions.getSelectedValue());
+        String fake = misspelling.getText();
+        if (original.equals(fake)) {
+            master.changeWord((String) suggestions.getSelectedValue());
+        } else {
+            master.changeWord(fake);
+            master.addfake(original, fake);
+        }
         checkSpelling();
 
     }//GEN-LAST:event_changeActionPerformed

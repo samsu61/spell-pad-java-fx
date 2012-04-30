@@ -42,40 +42,58 @@ public class DictionaryController {
         String word = entry.getText();
         TernarySearchTree dictionary = cache.getDictionary();
         String suffix = dictionary.search(word);
-        if(!suffix.isEmpty()){
+        if (!suffix.isEmpty()) {
             strings.add(word + suffix);
         }
         for (int i = 0; i < word.length() - 1; i++) {
-            //switch letters exhaustively
-            for (int j = i + 1; j < word.length(); j++) {
-                StringBuilder newWord = new StringBuilder(word);
-                char first = newWord.charAt(i);
-                char second = newWord.charAt(j);
-                newWord.setCharAt(i, second);
-                newWord.setCharAt(j, first);
-                if (dictionary.contains(newWord.toString())) {
-                    strings.add(newWord.toString());
-                }
-                suffix = dictionary.search(newWord.toString());
-                if (!suffix.isEmpty()) {
-                    String completion = newWord + suffix;
-                    if (!completion.equals(word) && !strings.contains(completion)) {
-                        strings.add(completion);
-                    }
-                }
+            switchLetters(i, word, dictionary, strings);
+            shortenedPrefix(word, i, dictionary, strings);
+        }
+        Collections.sort(strings);
+        return strings;
+    }
+
+    private void switchLetters(int i, String word, TernarySearchTree dictionary, List<String> strings) {
+        String suffix;
+        //switch letters exhaustively
+        for (int j = i + 1; j < word.length(); j++) {
+            StringBuilder newWord = new StringBuilder(word);
+            char first = newWord.charAt(i);
+            char second = newWord.charAt(j);
+            newWord.setCharAt(i, second);
+            newWord.setCharAt(j, first);
+            if (dictionary.contains(newWord.toString())) {
+                strings.add(newWord.toString());
             }
-            //try shortening the prefix
-            String suggestion = word.substring(0, word.length() - 1 - i);
-            suffix = dictionary.search(suggestion);
+            suffix = dictionary.search(newWord.toString());
             if (!suffix.isEmpty()) {
-                String completion = suggestion + suffix;
+                String completion = newWord + suffix;
                 if (!completion.equals(word) && !strings.contains(completion)) {
                     strings.add(completion);
                 }
             }
         }
-        Collections.sort(strings);
-        return strings;
+    }
+
+    public void addfake(String fake, String correction) {
+        cache.getDictionary().addFake(fake, correction);
+        
+    }
+
+    private void shortenedPrefix(String word, int i, TernarySearchTree dictionary, List<String> strings) {
+        String suffix;
+        //try shortening the prefix
+        String suggestion = word.substring(0, word.length() - 1 - i);
+        suffix = dictionary.search(suggestion);
+        if (!suffix.isEmpty()) {
+            String completion = suggestion + suffix;
+            if (!completion.equals(word) && !strings.contains(completion)) {
+                strings.add(completion);
+            }
+        }
+        if (dictionary.contains(suggestion) && !strings.contains(suggestion)) {
+            strings.add(suggestion);
+        }
     }
 
     public void spellCheckInvoked() {
