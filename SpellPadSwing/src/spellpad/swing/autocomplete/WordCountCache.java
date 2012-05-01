@@ -59,7 +59,7 @@ public class WordCountCache implements Runnable, Resetable {
             scan:
             while (scanner.hasNext()) {
                 String key = scanner.next().toLowerCase();
-                if (key.length() < 4) {
+                if (key.length() < 3) {
                     continue;
                 }
                 tree.add(key);
