@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import org.apache.commons.codec.language.DoubleMetaphone;
 import spellpad.swing.SpellCheckWindow;
 import spellpad.swing.autocomplete.TernarySearchTree;
 import spellpad.swing.autocomplete.WordCountCache;
@@ -41,9 +42,16 @@ public class DictionaryController {
         List<String> strings = new ArrayList<>();
         String word = entry.getText();
         TernarySearchTree dictionary = cache.getDictionary();
+        DoubleMetaphone codex = new DoubleMetaphone();
+        codex.setMaxCodeLen(6);
+        List<String> soundexSuggestions = cache.getSoundex().get(codex.encode(word));
+        if (soundexSuggestions != null) {
+            strings.addAll(soundexSuggestions);
+        }
         String suffix = dictionary.search(word);
         String test = dictionary.getFakeWordPointer(word);
-        if(test != null){
+        String metaphone = new DoubleMetaphone().encode(word);
+        if (test != null) {
             strings.add(test);
         }
         if (!suffix.isEmpty()) {
@@ -53,7 +61,7 @@ public class DictionaryController {
             switchLetters(i, word, dictionary, strings);
             shortenedPrefix(word, i, dictionary, strings);
         }
-        Collections.sort(strings);
+        //Collections.sort(strings);
         return strings;
     }
 
@@ -98,7 +106,7 @@ public class DictionaryController {
     public void addfake(String fake, String correction) {
         cache.getDictionary().addFake(fake, correction);
     }
-    
+
     public void spellCheckInvoked() {
         mainWindow.setEnabled(false);
         if (!misspellings.isEmpty()) {

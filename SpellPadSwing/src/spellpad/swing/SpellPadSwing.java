@@ -42,6 +42,7 @@ public class SpellPadSwing {
             Thread.sleep(175);
         }
         wordCache.setDictionary(loader.getTree());
+        wordCache.setSoundex(loader.getSoundex());
     }
 
     public void init() {
