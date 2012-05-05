@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.RefinedSoundex;
 import spellpad.swing.autocomplete.TernarySearchTree;
 
@@ -27,8 +26,7 @@ public class DictionaryLoader implements Runnable {
     @Override
     public void run() {
         try (Scanner input = new Scanner(new FileInputStream(dictionary))) {
-            DoubleMetaphone metaphone = new DoubleMetaphone();
-            metaphone.setMaxCodeLen(6);
+            RefinedSoundex metaphone = RefinedSoundex.US_ENGLISH;
             while (input.hasNext()) {
                 String text = input.nextLine().toLowerCase();
                 String encoding = metaphone.encode(text);

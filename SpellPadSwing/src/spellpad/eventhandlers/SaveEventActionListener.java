@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 import spellpad.filetype.parsing.SpellpadParser;
 
 /**
@@ -25,23 +26,28 @@ public class SaveEventActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (textArea == null) {
-            return;
+        try {
+            if (textArea == null) {
+                return;
+            }
+
+            FileChooserDetails details = FileFilterFactory.getFileFromPopupDialogue(FileAction.SAVE);
+            File chosenFile = details.getFile();
+            FileNameExtensionFilter chosenFilter = details.getExtensionFilter();
+
+            if (chosenFile == null || chosenFilter == null) {
+                System.out.print("null file or filter");
+                return;
+            }
+
+            String textInArea2 = textArea.getDocument().getText(0, textArea.getDocument().getLength());
+            String textInArea = textArea.getText();
+            textInArea = SpellpadParser.restorePlainText(textInArea);
+            System.out.println(textInArea);
+            writeFile(chosenFile, chosenFilter, textInArea);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(SaveEventActionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        FileChooserDetails details = FileFilterFactory.getFileFromPopupDialogue(FileAction.SAVE);
-        File chosenFile = details.getFile();
-        FileNameExtensionFilter chosenFilter = details.getExtensionFilter();
-
-        if (chosenFile == null || chosenFilter == null) {
-            System.out.print("null file or filter");
-            return;
-        }
-
-        String textInArea = textArea.getText();
-        textInArea = SpellpadParser.restorePlainText(textInArea);
-        System.out.println(textInArea);
-        writeFile(chosenFile, chosenFilter, textInArea);
     }
 
     private void writeFile(File chosenFile, FileNameExtensionFilter chosenFilter, String textInArea) {
