@@ -41,8 +41,10 @@ public abstract class BasicModificationActionListener implements ActionListener 
         boolean mark_before_dot = mark < dot;
         if (mark_before_dot) {
             textDocument.setCharacterAttributes(mark, dot - mark, attr, false);
+            textDocument.setParagraphAttributes(mark, dot-mark, attr, false);
         } else {
             textDocument.setCharacterAttributes(dot, mark - dot, attr, false);
+            textDocument.setParagraphAttributes(dot, mark-dot, attr, false);
         }
         System.out.println(textArea.getText());
         textArea.requestFocus();

@@ -6,7 +6,11 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.parser.ParserDelegator;
@@ -14,10 +18,10 @@ import javax.swing.undo.UndoManager;
 import spellpad.dictionary.DictionaryLoader;
 import spellpad.eventhandlers.OpenEventActionListener;
 import spellpad.eventhandlers.SaveEventActionListener;
-import spellpad.eventhandlers.SpellCheckChoiceActionListener;
 import spellpad.eventhandlers.SpellcheckActionListener;
 import spellpad.eventhandlers.mouse.MouseListener;
 import spellpad.eventhandlers.textmodifying.*;
+import spellpad.eventhandlers.textmodifying.dictionary.DictionaryController;
 import spellpad.swing.autocomplete.WordCountCache;
 
 /**
@@ -50,6 +54,11 @@ public class SpellPadSwing {
         undoManager.setLimit(500);
         setLookAndFeel();
         window = initFrame();
+        try {
+            window.setIconImage(getIcon("icon.png", ""));
+        } catch (IOException ex) {
+            Logger.getLogger(SpellPadSwing.class.getName()).log(Level.SEVERE, null, ex);
+        }
         SpellPadEditorPane editPane = initTextPane();
         wordCache = new WordCountCache(editPane);
         JScrollPane textAreaScrollPane = addScrolling(editPane, window);
@@ -64,8 +73,8 @@ public class SpellPadSwing {
         editPane.getDocument().addUndoableEditListener(undoManager);
         editPane.getDocument().addDocumentListener(new DocumentChangedActionListener(editPane, wordCache));
 
-        editPane.requestFocus();
         window.setVisible(true);
+        editPane.requestFocus();
     }
 
     private void getAndRegisterOpenEventListener(SpellPadEditorPane editPane, JMenuItem open) {
@@ -79,12 +88,18 @@ public class SpellPadSwing {
         JButton boldButton = new JButton("B");
         JButton italicButton = new JButton("I");
         JButton underlineButton = new JButton("U");
+        JButton leftButton = new JButton("L");
+        JButton centerButton = new JButton("C");
+        JButton rightButton = new JButton("R");
         JButton undoButton = new JButton("Undo");
         JButton redoButton = new JButton("Redo");
         JButton spellCheck = new JButton("Spellcheck");
         boldButton.addActionListener(new BoldActionListener(editPane));
         italicButton.addActionListener(new ItalicsActionListener(editPane));
         underlineButton.addActionListener(new UnderlineActionListener(editPane));
+        leftButton.addActionListener(new LeftJustifyActionListener(editPane));
+        centerButton.addActionListener(new CenterJustifyActionListener(editPane));
+        rightButton.addActionListener(new RightJustifyActionListener(editPane));
         undoButton.addActionListener(new UndoActionListener(manager));
         redoButton.addActionListener(new RedoActionListener(manager));
         spellCheck.addActionListener(new SpellcheckActionListener(editPane, wordCache, window));
@@ -92,6 +107,9 @@ public class SpellPadSwing {
         toolBar.add(boldButton);
         toolBar.add(italicButton);
         toolBar.add(underlineButton);
+        toolBar.add(leftButton);
+        toolBar.add(centerButton);
+        toolBar.add(rightButton);
         toolBar.add(undoButton);
         toolBar.add(redoButton);
         toolBar.add(spellCheck);
@@ -146,9 +164,18 @@ public class SpellPadSwing {
         menubar.add(edit);
 
         JMenu settings = new JMenu("Settings");
-        JMenuItem spellCheckChoice = new JMenuItem("Dictionary");
-        spellCheckChoice.addActionListener(new SpellCheckChoiceActionListener(spellCheckChoice));
-        settings.add(spellCheckChoice);
+        JMenuItem resetDictionary = new JMenuItem("Reset Dictionary Ignore List");
+        resetDictionary.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DictionaryController.ignorance.clear();
+            }
+        });
+        settings.add(resetDictionary);
+        //JMenuItem spellCheckChoice = new JMenuItem("Dictionary");
+        //spellCheckChoice.addActionListener(new SpellCheckChoiceActionListener(spellCheckChoice));
+        //settings.add(spellCheckChoice);
         menubar.add(settings);
 
         return menubar;
@@ -188,7 +215,13 @@ public class SpellPadSwing {
         window.setBounds(0, 0, 800, 600);
         window.setLocationRelativeTo(null);
         window.setTitle("SpellPad");
+        window.setIconImage(null);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return window;
+    }
+    
+    private BufferedImage getIcon(String path, String description) throws IOException{
+        java.net.URL imgURL = getClass().getResource(path);
+        return ImageIO.read(imgURL);
     }
 }

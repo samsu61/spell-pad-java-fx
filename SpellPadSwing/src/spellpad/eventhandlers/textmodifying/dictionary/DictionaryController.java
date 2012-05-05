@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import org.apache.commons.codec.language.DoubleMetaphone;
+import org.apache.commons.codec.language.RefinedSoundex;
 import spellpad.swing.SpellCheckWindow;
 import spellpad.swing.autocomplete.TernarySearchTree;
 import spellpad.swing.autocomplete.WordCountCache;
@@ -20,14 +20,14 @@ import spellpad.swing.autocomplete.WordCountCache;
 public class DictionaryController {
 
     private LinkedList<MisspellingEntry> misspellings;
-    private LinkedList<String> ignorance;
+    public static LinkedList<String> ignorance = new LinkedList<>();
+    private static LinkedList<String> temporaryIgnorance = new LinkedList<>();
     private SpellCheckWindow checkWindow;
     private JTextPane textArea;
     private JFrame mainWindow;
     private WordCountCache cache;
 
     public DictionaryController(JTextPane checkOn, WordCountCache dictionaryOwner, JFrame dispatcher) {
-        ignorance = new LinkedList<>();
         textArea = checkOn;
         cache = dictionaryOwner;
         mainWindow = dispatcher;
@@ -42,15 +42,13 @@ public class DictionaryController {
         List<String> strings = new ArrayList<>();
         String word = entry.getText();
         TernarySearchTree dictionary = cache.getDictionary();
-        DoubleMetaphone codex = new DoubleMetaphone();
-        codex.setMaxCodeLen(6);
-        List<String> soundexSuggestions = cache.getSoundex().get(codex.encode(word));
+        RefinedSoundex soundex = RefinedSoundex.US_ENGLISH;
+        List<String> soundexSuggestions = cache.getSoundex().get(soundex.encode(word));
         if (soundexSuggestions != null) {
             strings.addAll(soundexSuggestions);
         }
         String suffix = dictionary.search(word);
         String test = dictionary.getFakeWordPointer(word);
-        String metaphone = new DoubleMetaphone().encode(word);
         if (test != null) {
             strings.add(test);
         }
@@ -58,11 +56,41 @@ public class DictionaryController {
             strings.add(word + suffix);
         }
         for (int i = 0; i < word.length() - 1; i++) {
+            checkProximateKeys(i, word, dictionary, strings);
+            removeLetters(i, word, dictionary, strings);
             switchLetters(i, word, dictionary, strings);
             shortenedPrefix(word, i, dictionary, strings);
         }
         //Collections.sort(strings);
         return strings;
+    }
+
+    private void checkProximateKeys(int i, String word, TernarySearchTree dictionary, List<String> strings) {
+        String suffix;
+        ProximateKeys keys = ProximateKeys.getInstance();
+        char[] chars = keys.getProximate(word.charAt(i));
+        StringBuilder sb = new StringBuilder(word);
+        for (char c : chars) {
+            sb.replace(i, i + 1, Character.toString(c));
+            if (dictionary.contains(sb.toString()) && !strings.contains(sb.toString())) {
+                strings.add(sb.toString());
+            }
+            suffix = dictionary.search(sb.toString());
+            if (!suffix.isEmpty()) {
+                String completion = sb + suffix;
+                if (!completion.equals(sb) && !strings.contains(completion)) {
+                    strings.add(completion);
+                }
+            }
+        }
+    }
+
+    private void removeLetters(int i, String word, TernarySearchTree dictionary, List<String> strings) {
+        StringBuilder sb = new StringBuilder(word);
+        sb.replace(i, i + 1, "");
+        if (dictionary.contains(sb.toString()) && !strings.contains(sb.toString())) {
+            strings.add(sb.toString());
+        }
     }
 
     private void switchLetters(int i, String word, TernarySearchTree dictionary, List<String> strings) {
@@ -74,7 +102,7 @@ public class DictionaryController {
             char second = newWord.charAt(j);
             newWord.setCharAt(i, second);
             newWord.setCharAt(j, first);
-            if (dictionary.contains(newWord.toString())) {
+            if (dictionary.contains(newWord.toString()) && !strings.contains(newWord.toString())) {
                 strings.add(newWord.toString());
             }
             suffix = dictionary.search(newWord.toString());
@@ -138,12 +166,10 @@ public class DictionaryController {
                     }
                 }
                 String word = content.substring(i, wordEnd);
-                if (word.length() > 1 && !cache.getDictionary().contains(word)) {
+                if (word.length() > 1 && !cache.getDictionary().contains(word) && !ignorance.contains(word)) {
                     misspellings.add(new MisspellingEntry(i, word));
                 }
                 i = wordEnd + 1;
-
-
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(DictionaryController.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,6 +185,7 @@ public class DictionaryController {
     public void ignoreWord(String ignored) {
         MisspellingEntry entry = misspellings.peek();
         if (entry.text.equals(ignored)) {
+            temporaryIgnorance.add(ignored);
             misspellings.pollFirst();
         }
     }
@@ -168,6 +195,7 @@ public class DictionaryController {
         int i = misspellings.size();
         while (i > 0) {
             if (misspellings.get(--i).text.equals(ignoredCompletely)) {
+                ignorance.add(misspellings.get(i).text);
                 misspellings.remove(i);
                 //i--;
             }
@@ -206,7 +234,9 @@ public class DictionaryController {
     }
 
     public void cancel() {
+        temporaryIgnorance.clear();
         mainWindow.setEnabled(true);
+        textArea.requestFocusInWindow();
         mainWindow.requestFocus();
     }
 
