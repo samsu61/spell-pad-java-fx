@@ -11,6 +11,7 @@ public class SpellpadParser {
     static final String MAGICSTRING = "madsfkjdlkiadflejkaldicislaldkfdleoqopa";
 
     SpellpadParser() {
+        
     }
 
     public static String prepPlainText(String plainText) {

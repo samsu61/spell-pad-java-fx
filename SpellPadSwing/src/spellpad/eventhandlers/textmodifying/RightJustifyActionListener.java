@@ -16,6 +16,7 @@ public class RightJustifyActionListener extends BasicModificationActionListener{
 
     public RightJustifyActionListener(SpellPadEditorPane editor) {
         super(editor);
+        isParagraph = true;
     }
     
     @Override

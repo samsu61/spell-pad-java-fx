@@ -1,6 +1,7 @@
 package spellpad.swing.autocomplete;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -9,10 +10,12 @@ import java.util.regex.Pattern;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import spellpad.eventhandlers.textmodifying.dictionary.DictionaryController;
+import spellpad.eventhandlers.textmodifying.dictionary.MisspellingEntry;
 
 /**
  *
- * 
+ *
  * @author Jesse Allen
  */
 public class WordCountCache implements Runnable, Resetable {
@@ -30,8 +33,6 @@ public class WordCountCache implements Runnable, Resetable {
         this.soundex = soundex;
     }
 
-    
-    
     public void setDictionary(TernarySearchTree dictionary) {
         this.dictionary = dictionary;
     }
@@ -62,19 +63,15 @@ public class WordCountCache implements Runnable, Resetable {
             scanner.useDelimiter(Pattern.compile("[\\s\\W]"));
 
             while (scanner.hasNext()) {
-                String key = scanner.next().toLowerCase();
-                if (key.length() < 3) {
+                String key = scanner.next();
+                String key2 = key.toLowerCase();
+                if (key2.length() < 3) {
                     continue;
                 }
-                tree.add(key);
+                tree.add(key2);
             }
-//                for (int i = 0; i < wordCounts.size(); i++) {
-//                    if (key.equals(wordCounts.get(i).getWord())) {
-//                        wordCounts.get(i).seenAnother();
-//                        continue scan;
-//                    }
-//                }
-//                wordCounts.add(new Entry(1, key));
+
+
 
         } catch (BadLocationException ex) {
             Logger.getLogger(WordCountCache.class.getName()).log(Level.SEVERE, null, ex);

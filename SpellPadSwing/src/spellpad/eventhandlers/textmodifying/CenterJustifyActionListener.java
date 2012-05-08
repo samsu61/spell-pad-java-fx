@@ -12,12 +12,13 @@ import spellpad.swing.SpellPadEditorPane;
  *
  * @author Jesse Allen
  */
-public class CenterJustifyActionListener extends BasicModificationActionListener{
+public class CenterJustifyActionListener extends BasicModificationActionListener {
 
     public CenterJustifyActionListener(SpellPadEditorPane editor) {
         super(editor);
+        isParagraph = true;
     }
-    
+
     @Override
     SimpleAttributeSet doSpecific() {
         SimpleAttributeSet attr = new SimpleAttributeSet();
@@ -28,5 +29,4 @@ public class CenterJustifyActionListener extends BasicModificationActionListener
         }
         return attr;
     }
-    
 }
