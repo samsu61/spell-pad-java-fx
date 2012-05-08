@@ -39,20 +39,12 @@ public abstract class BasicModificationActionListener implements ActionListener 
         int dot = cursor.getDot();
         textArea.setCaretPosition(textArea.getSelectionStart());
         SimpleAttributeSet attr = doSpecific();
-        boolean mark_before_dot = mark < dot;
-        //if (mark_before_dot) {
-            if (isParagraph) {
-                textDocument.setParagraphAttributes(mark, dot - mark, attr, false);
-            } else {
-                textDocument.setCharacterAttributes(mark, dot - mark, attr, false);
-            }
-//        } else {
-//            if (isParagraph) {
-//                textDocument.setCharacterAttributes(dot, mark - dot, attr, false);
-//            } else {
-//                textDocument.setParagraphAttributes(dot, mark - dot, attr, false);
-//            }
-//        }
+        if (isParagraph) {
+            textDocument.setParagraphAttributes(mark, dot - mark, attr, false);
+        } else {
+            textDocument.setCharacterAttributes(mark, dot - mark, attr, false);
+            textDocument.setCharacterAttributes(dot, mark - dot, attr, false);
+        }
         System.out.println(textArea.getText());
         textArea.requestFocus();
     }
