@@ -1,5 +1,6 @@
 package spellpad.eventhandlers.textmodifying.dictionary;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -8,6 +9,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import org.apache.commons.codec.language.RefinedSoundex;
 import spellpad.swing.SpellCheckWindow;
 import spellpad.swing.autocomplete.TernarySearchTree;
@@ -150,8 +155,13 @@ public class DictionaryController {
 
     private void findMisspellings() {
         misspellings = new LinkedList<>();
+//        SimpleAttributeSet attr = new SimpleAttributeSet();
+//        StyleConstants.setForeground(attr, Color.black);
+        StyledDocument textDocument = (StyledDocument) textArea.getDocument();
+//        textDocument.setCharacterAttributes(0, textDocument.getLength(), attr, false);
+//        StyleConstants.setForeground(attr, Color.red);
         try {
-            String content = textArea.getDocument().getText(0, textArea.getDocument().getLength()).toLowerCase();
+            String content = textDocument.getText(0, textArea.getDocument().getLength()).toLowerCase();
             for (int i = 0; i < content.length();) {
                 if (!Character.isLetter(content.charAt(i))) {
                     i++;
@@ -168,6 +178,7 @@ public class DictionaryController {
                 String word = content.substring(i, wordEnd);
                 if (word.length() > 1 && !cache.getDictionary().contains(word) && !ignorance.contains(word)) {
                     misspellings.add(new MisspellingEntry(i, word));
+//                    textDocument.setCharacterAttributes(i, wordEnd, attr, false);
                 }
                 i = wordEnd + 1;
             }

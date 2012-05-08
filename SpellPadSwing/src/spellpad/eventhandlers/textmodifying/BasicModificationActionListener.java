@@ -17,6 +17,7 @@ import spellpad.swing.SpellPadEditorPane;
 public abstract class BasicModificationActionListener implements ActionListener {
 
     SpellPadEditorPane textArea;
+    protected boolean isParagraph = false;
 
     public BasicModificationActionListener(SpellPadEditorPane editor) {
         textArea = editor;
@@ -39,13 +40,19 @@ public abstract class BasicModificationActionListener implements ActionListener 
         textArea.setCaretPosition(textArea.getSelectionStart());
         SimpleAttributeSet attr = doSpecific();
         boolean mark_before_dot = mark < dot;
-        if (mark_before_dot) {
-            textDocument.setCharacterAttributes(mark, dot - mark, attr, false);
-            textDocument.setParagraphAttributes(mark, dot-mark, attr, false);
-        } else {
-            textDocument.setCharacterAttributes(dot, mark - dot, attr, false);
-            textDocument.setParagraphAttributes(dot, mark-dot, attr, false);
-        }
+        //if (mark_before_dot) {
+            if (isParagraph) {
+                textDocument.setParagraphAttributes(mark, dot - mark, attr, false);
+            } else {
+                textDocument.setCharacterAttributes(mark, dot - mark, attr, false);
+            }
+//        } else {
+//            if (isParagraph) {
+//                textDocument.setCharacterAttributes(dot, mark - dot, attr, false);
+//            } else {
+//                textDocument.setParagraphAttributes(dot, mark - dot, attr, false);
+//            }
+//        }
         System.out.println(textArea.getText());
         textArea.requestFocus();
     }
