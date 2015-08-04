@@ -1,0 +1,1 @@
+A text editor with advanced spell check and auto-complete for my capstone project.
